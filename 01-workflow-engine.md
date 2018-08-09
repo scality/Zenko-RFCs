@@ -165,6 +165,28 @@ Examples of 3rd-party plugins:
 ##### encodeVideo(format)
 Encode a video in the given format, generates a new object.
 
+#### Example of Execution
+
+| Step | Description |
+| ------------- | ------------- |
+| 1 - Plugin1 registers | The first plugin registers itself and its tuning parameters to the workflow engine |
+| 2 - Plugin2 registers | The second plugin registers itself and its tuning parameters to the workflow engine |
+| 3 - Workflow engine to register plugins | The workflow engine registers the new plugins and their tuning parameters to the configuration hub (Management agent). |
+| 4 - Management agent to register plugins | The Management agent transmits the new plugins and their tuning parameters to Orbit |
+| 5 - Edit workflow | An account edits the workflow in Orbit with a GUI. Since the 2 plugins are registered, the account can drag-and-drop the 2 plugins and tune their parameters.|
+| 6 - Push JSON workflow| When the account clicks on “deploy” the new workflow is sent to the Management Agent.|
+| 7- Store config | The workflow is stored in the configuration |
+| 8 - Read config | The workflow engine producer (WEP) reads the config |
+| 9 - Execute workflow | The WEP executes the workflow.|
+| 10 - Plugin1 queue | The first step of the workflow is e.g. to feed the plugin queue with events coming from a specific location, if the plugins requires it. It is possible that the plugins only requires to be launched at a specific time (crontab) and then the WMP will only manage the output queue.|
+| 11 - Produce plugin1 | The events for the first plugin (e.g. MD of objects) are queued in the dedicated plugin1 queue.|
+| 12 - Consume plugin1 | The Workflow engine consumer (WEC) reads the events for the first plugin. |
+| 13 - Call plugin1 | For each event in the queue the WEC call the plugin1 with a REST interface. By defaults only the MD of the objects are sent along, if the plugin needs data it can use the location:objectId and ask CloudServer|
+| 14 - Output plugin1 | For each input event there is an output event which is returned to the WEC. |
+| 15 - Plugin2 queue | The WEC (acting as a WEP) feeds the second plugin input queue. |
+| 16 - Produce plugin2 | The MD are queued for plugin2 consumption.|
+| 17 - Consume plugin2 | The WEC consumes the queue.|
+| 18 - Call plugin2 | Plugin2 is called on a REST interface. Assuming plugin2 is a terminator plugin, the workflow ends here.|
 
 ### Alternatives
 
