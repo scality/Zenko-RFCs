@@ -45,16 +45,16 @@ Scope of the effort.
 +-----------------+
 |                 |
 |                 |
-|                 | Graphical Workflow Edition
-|   Orbit UI      |
+|    Orbit UI     | Graphical Workflow Edition
+|                 |
 |                 | Statistics, Dashboard
 +---------------+-+
                 |
                 |
                 |              +-------------------------+
-                |              |                         |
+                +              |                         |
           JSON workflow        |                         |
-                |              |   Workflow Engine       |
+                +              |   Workflow Engine       |
                 |              |                         |
              +--v--------+     |                         |
              |Management +----->                         |
@@ -63,13 +63,13 @@ Scope of the effort.
                                  |                |
                                  |                |
                                  |                |
-                  +------------+-+                |
-                  |            |             +----+------+
-                  |            |             |           |
-                  | plugin1    |             |           |
-                  |            |             | plugin2   |
-                  +------------+             |           |
-                                             +-----------+
++----------------+            +--+----------  +---+-------+
+|                |   DATA     |            |  |           |
+|  Cloud Server  |            |            |  |           |
+|                <------------+ plugin1    |  | plugin2   |
+|                |            |            |  |           |
++----------------+            +------------+  +-----------+
+
 
 ```
 
@@ -83,6 +83,7 @@ Scope of the effort.
 | Workflow Statistics | The workflow manager maintains and reports statistics about objects traversing each single workflow and each single step of each workflow. |
 | Workflow Dashboard | At any time the system administrator can view graphically the statistics on Orbit UI. |
 | Management Agent | Agent that communicates with with Orbit |
+| Cloud Server | Needed when a plugin requires reading or writing data |
 
 #### Requirements
 
