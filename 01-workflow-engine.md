@@ -91,6 +91,9 @@ Scope of the effort.
 Orbit sends the new JSON file to the Workflow Manager which will be responsible for executing it. 
 Every step will try to match an object name or some properties and possibly trigger an action which can be a built-in function or an external module (e.g. encryption, compression, data movement, etc).
 
+##### Non-disruption of existing traffic
+It is not possible to modify a workflow in place because it would be too disruptive for the current traffic: a new workflow is always created. Instead, it is proposed to apply the new workflow to a percentage of the traffic (e.g. 5%).
+
 ##### Multiple parallel workflows
 The Workflow Manager can actually executes many workflows
 
