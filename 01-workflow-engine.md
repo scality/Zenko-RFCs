@@ -24,6 +24,8 @@ Allows unauthenticated access by IP address.
 E.g. for financial needs it is forbidden to update the system after 5pm.
 ##### Refuse PUTs based on Size of files
 In this mode we may enforce the 100-continue mechanism.
+##### Refuse PUTs based on presence of some attributes
+In this mode we may enforce some attributes in the PUT headers.
 ##### Bucket Object Prefix
 Restricts users by prefixes.
 
