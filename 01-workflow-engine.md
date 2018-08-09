@@ -130,7 +130,7 @@ Plugins that manipulate data read the data from Cloudserver with the location:ob
 #### Generic Workflow Functions
 Here is a non-exhaustive list of workflow functions:
 
-##### filterByIPAddress
+##### filterByIPAddress()
 Filter an S3 operation by IP address
 
 ##### putObjectToLocation(location)
