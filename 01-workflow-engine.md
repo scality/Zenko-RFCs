@@ -5,40 +5,41 @@
 
 ### Problem Description
 
-### Use-cases Description
+### Use Cases
 
-What uses-cases does this address? what impact on actors does this change have ?
+Which use cases does this address? What impact does this change have? On which
+actors?
 
-Ensure you are clear about the actors in each use case: developers, users, deployers, etc
+Be clear about the model actor in each use case: developer, user, deployer, etc.
 
-#### Notification (SNS) API
-We may support the PutBucketNotification API and have the option to trigger a workflow in case of an event.
+#### Notification SNS (Simple Notification Service) like-API
+We may support the PutBucketNotification API and present the option of
+triggering a workflow in case of an event.
 
-#### “Authorization” (SAS) API
-We may support an API similar to SNS but which can call a workflow before actual any data to be sent to CloudServer (e.g. avoiding that 1TB files are sent if unauthorized).
+#### Authorization API
+We may support an API similar to SNS that can call a workflow before actually
+sending any data to CloudServer (e.g. avoiding sending unauthorized 1 TB files).
 
-Sub use cases:
-##### Restraint Access by IP Address
-Allows unauthenticated access by IP address.
-##### Refuse PUTs based on Time
-E.g. for financial needs it is forbidden to update the system after 5pm.
-##### Refuse PUTs based on Size of files
-In this mode we may enforce the 100-continue mechanism.
-##### Refuse PUTs based on presence of some attributes
-In this mode we may enforce some attributes in the PUT headers.
+##### Limited Access by IP Address
+Allow unauthenticated access by specified IP addresses.
+##### Refuse PUTs by Time
+For example, a financial service may forbid updating a system after 5pm.
+##### Refuse PUTs by File Size
+This mode can enforce the 100-continue mechanism.
+##### Refuse PUTs by Attribute
+Read the PUT headers to enforce certain attributes.
 ##### Bucket Object Prefix
 Restricts users by prefixes.
 
 #### Cron-Based “Search” Workflows
-These workflows are triggered by a crontab and typically generate their initial queues by searching objects in locations, e.g. aws:foo/*.jpg.
+These workflows are triggered by a crontab and typically generate their initial queues by searching objects in locations; aws:foo/\*.jpg , for example.
 
 
 ### Proposed Changes
 
-Here is how we propose to solve the problem.
+[Here is how we propose to solve the problem.]
 
-Scope of the effort.
-
+[Scope of effort.]
 
 #### Architecture Diagram
 
@@ -79,119 +80,181 @@ Scope of the effort.
 
 | Component | Description |
 | ------------- | ------------- |
-| Graphical workflow edition  | This component is done in Orbit UI. It is possible to define multiple workflows. When saving the workflows, it generates a JSON file that describe the set of workflows that can be read by the Workflow Manager. |
-| Workflow Engine  | This component is implemented in Backbeat and executes the actual JSON defined workflows  |
-| Plugins | Plugins register to the workflow engine and perform single tasks in the workflow, e.g. compression, trigger lambda. |
-| Workflow Statistics | The workflow manager maintains and reports statistics about objects traversing each single workflow and each single step of each workflow. |
-| Workflow Dashboard | At any time the system administrator can view graphically the statistics on Orbit UI. |
-| Management Agent | Agent that communicates with with Orbit |
-| Cloud Server | Needed when a plugin requires reading or writing data |
+| Graphical Workflow Editing  | One can define multiple workflows using this Orbit UI component. When saving workflows, it generates a JSON file describing the set of workflows the Workflow Manager can read. **[This is the first mention of the "Workflow Manager" entity. Define it sooner.]** |
+| Workflow Engine  | This Backbeat component executes the JSON-defined workflows. |
+| Plugins | Plugins register to the Workflow Engine and perform single tasks in the workflow, such as compression or Lambda triggering. |
+| Workflow Statistics | The Workflow Manager maintains and reports statistics about objects traversing each workflow the steps of each workflow. |
+| Workflow Dashboard | The system administrator can view Orbit UI statistics  graphically. |
+| Management Agent | Agent that communicates with Orbit. |
+| CloudServer | Needed when a plugin requires reading or writing data. |
 
 #### Requirements
 
 
-##### Execution of the workflow
-Orbit sends the new JSON file to the Workflow Manager which will be responsible for executing it. 
-Every step will try to match an object name or some properties and possibly trigger an action which can be a built-in function or an external module (e.g. encryption, compression, data movement, etc).
+##### Workflow
+Orbit will send the new JSON file to the Workflow Manager, which will be
+responsible for executing it.
 
-##### Non-disruption of existing traffic
-It is not possible to modify a workflow in place because it would be too disruptive for the current traffic: a new workflow is always created. Instead, it is proposed to apply the new workflow to a percentage of the traffic (e.g. 5%).
+At every step, the Workflow Manager will check for matches in object names or
+other properties to trigger an action, which can be a built-in function or an
+external module (e.g. encryption, compression, data movement, etc.)
 
-##### Multiple parallel workflows
-The Workflow Manager can actually executes many workflows
+##### Non-Disruption of Existing Traffic
+Currently, modifying a workflow in place is too disruptive for traffic, so a
+new workflow is always created. We propose applying new workflows to a
+portion (5%, for example) of traffic.
 
-#####  A workflow has many steps
-A workflow is composed of many steps, having one or many inputs.
+##### Multiple Parallel Workflows
+The Workflow Manager can simultaneously execute many workflows.
 
-##### Source of a workflow
-At every beginning of a workflow there is an MD source (events generated by actual traffic or by a cloud trace (e.g. Admin API or other cloud specific event logs like AWS Lambda or Azure functions). The input of a workflow can also be the result of MD searches executing at specific times (e.g. searchObject(“bar”, “*.jpg” ) bound to a crontab). 
+#####  Multi-Step Workflows
+A workflow can consist of many steps, with one or many inputs.
 
-##### Terminator of a workflow
-At every end of a workflow there is a terminator that stops the workflow. The terminator can be e.g. a copy on a cloud  - putObjectToLocation(), or a trigger of a Lambda function - executeLambda().
+##### Workflow Source
+At the beginning of every workflow there is a metadata source (events generated
+by actual traffic or by a cloud trace, such as Admin API or other cloud-specific
+event logs like AWS Lambda or Azure functions). A workflow’s input can also
+result from metadata searches executing at specified times (for example, searchObject (“bar”, “\*.jpg” )[**is this search syntax? If so, set as
+``code``. If not, get back to me.**] bound to a crontab).
 
-##### Tolerance of impedance between plugins
-Since all plugins don’t process information at the same time, and for failure resilience, every time a workflow step needs to execute a specific plugin we perform input AND output queuing (e.g. in a specific topic), the output being the input of the next plugin and so on.
+##### Workflow Termination
+At the end of every workflow is a terminator that stops the workflow. The
+terminator can, for example, be a copy to a cloud (putObjectToLocation()),
+or the triggering of a Lambda function (executeLambda()).
 
-##### Multi-language support
-A Workflow module could be written in any language (nodejs, python, go, C, C++, etc) so we will favor a REST API for interacting between modules.
+##### Impedance Tolerance Between Plugins
+Because all plugins can’t process information at the same time, as well as for
+resilience, every time a workflow step must execute a specific plugin, input
+*and* output queuing (for example, in a specific topic) is performed, with the
+output being the input of the next plugin, and so on.
 
-##### Unity of language for the framework itself
+##### Multi-Language Support
+Because a workflow module could be written in any language (NodeJS, Python, Go,
+C, C++, etc.) we will favor a REST API for interaction between modules.
+
+##### Single Framework Language
 The workflow manager is a Backbeat task written in NodeJS.
 
-##### Type of workflows
-Workflow management could occur at different steps of Cloudserver:
-Authorization step
-Notification step (event)
-Cron based, e.g. search
+##### Workflow Types
+Workflow Management may occur at different CloudServer process steps:
 
-##### Nature of queues
-Workflows queues only contain some metadata: the object name the object ID and the “location” where to find the object (if possible in a transient source).
+- Authorization step
+- Notification step (event)
+- Cron-based (e.g., search)
 
-##### Type of plugins
-Some plugins are MD only (intput/output), some are DATA+MD (input/output), some are hybrid MD input/DATA+MD output, or DATA+MD input/MD output
+##### Nature of Queues
+Workflow queues only contain metadata: the object name, the object ID, and the “location” to find the object (if possible in a transient source).
 
-##### Data manipulation in plugins
-Plugins that manipulate data read the data from Cloudserver with the location:objectID specified in queues metadata. The output (if any) of the plugin is streamed to an object in CloudServer and the new location:objectID is stored in the queue for the next plugin in line.
+##### Types of Plugin
+Plugins can be:
+- Metadata-only for both input and output
+- Data-plus-metadata for both input and output
+- A hybrid of metadata input and data-plus-metadata output
+- A hybrid of data-plus-metadata input and metadata output
+
+##### Data Manipulation in Plugins
+Plugins that manipulate data read it from CloudServer, with location:objectID
+specified in queues metadata. The plugin’s output (if any) is streamed to an
+object in CloudServer and the new location:objectID is stored in the queue for
+the next plugin in line.
 
 #### Generic Workflow Functions
 Here is a non-exhaustive list of workflow functions:
 
-##### filterByIPAddress()
-Filter an S3 operation by IP address
+- **filterByIPAddress()**
 
-##### putObjectToLocation(location)
-Put a given object to a destination location.
+  Filter an S3 operation by IP address
 
-##### newObjectEvent(location)
-Triggered when a new object is created on a given location. This plugin will require to be fed with events coming from a location.
+- **putObjectToLocation(location)**
 
-##### encryptObject()
-Encrypt an object
+  Put a given object to a destination location.
 
-##### compressObject()
-Compress an object
+- **newObjectEvent(location)**
 
-##### executeLambda()
-Execute a code snippet, for e.g bucket notification
+  Triggered when a new object is created on a given
+  location. This plugin will have to be fed with events
+  coming from a location.
 
-##### searchObjects(location, regexp)
-Such all objects in a given location that match regexp. Can be used as a MD source.
+- **encryptObject()**
 
-##### erasureCode(n, k)
-Generate an n data and k coding fragments (as new objects), to be dispatched on different locations.
+  Encrypt an object
 
-##### tagObject()
-Tag the specific object with an attribute
+- **compressObject()**
 
-Examples of 3rd-party plugins:
+  Compress an object
 
-##### encodeVideo(format)
-Encode a video in the given format, generates a new object.
+- **executeLambda()**
 
-#### Example of Execution
+  Execute a code snippet (bucket notification, for example)
 
-| Step | Description |
-| ------------- | ------------- |
-| 1 - Plugin1 registers | The first plugin registers itself and its tuning parameters to the workflow engine |
-| 2 - Plugin2 registers | The second plugin registers itself and its tuning parameters to the workflow engine |
-| 3 - Workflow engine to register plugins | The workflow engine registers the new plugins and their tuning parameters to the configuration hub (Management agent). |
-| 4 - Management agent to register plugins | The Management agent transmits the new plugins and their tuning parameters to Orbit |
-| 5 - Edit workflow | An account edits the workflow in Orbit with a GUI. Since the 2 plugins are registered, the account can drag-and-drop the 2 plugins and tune their parameters.|
-| 6 - Push JSON workflow| When the account clicks on “deploy” the new workflow is sent to the Management Agent.|
-| 7- Store config | The workflow is stored in the configuration |
-| 8 - Read config | The workflow engine producer (WEP) reads the config |
-| 9 - Execute workflow | The WEP executes the workflow.|
-| 10 - Plugin1 queue | The first step of the workflow is e.g. to feed the plugin queue with events coming from a specific location, if the plugins requires it. It is possible that the plugins only requires to be launched at a specific time (crontab) and then the WMP will only manage the output queue.|
-| 11 - Produce plugin1 | The events for the first plugin (e.g. MD of objects) are queued in the dedicated plugin1 queue.|
-| 12 - Consume plugin1 | The Workflow engine consumer (WEC) reads the events for the first plugin. |
-| 13 - Call plugin1 | For each event in the queue the WEC call the plugin1 with a REST interface. By defaults only the MD of the objects are sent along, if the plugin needs data it can use the location:objectId and ask CloudServer|
-| 14 - Output plugin1 | For each input event there is an output event which is returned to the WEC. |
-| 15 - Plugin2 queue | The WEC (acting as a WEP) feeds the second plugin input queue. |
-| 16 - Produce plugin2 | The MD are queued for plugin2 consumption.|
-| 17 - Consume plugin2 | The WEC consumes the queue.|
-| 18 - Call plugin2 | Plugin2 is called on a REST interface. Assuming plugin2 is a terminator plugin, the workflow ends here.|
+- **searchObjects(location, regexp)**
+
+  Search all objects in a given location that match regexp.
+  Can be used as a metadata source.
+
+- **erasureCode(n, k)**
+
+  Generate an *n* data and *k* coding fragments (as new
+  objects), to be dispatched on different locations.
+
+- **tagObject()**
+
+  Tag the specific object with an attribute
+
+Third-party plugin example:
+
+- **encodeVideo(format)**
+
+  Encode a video in the given format. Generates a new object.
+
+#### Order of Execution
+
+1. **Plugin1 registers** The first plugin registers itself
+   and its tuning parameters to the workflow engine.
+2. **Plugin2 registers** The second plugin registers itself
+   and its tuning parameters to the workflow engine.
+3. **Workflow engine registers plugins** The workflow
+   engine registers the new plugins and their tuning parameters to the configuration hub (Management agent).
+4. **Management agent transmits plugins** The Management
+   agent transmits the new plugins and their tuning parameters to Orbit.
+5. **Edit workflow** An account edits the workflow in Orbit
+   with a GUI. Because the two plugins are registered, the
+   account can drag and drop them and tune their parameters.
+6. **Push JSON workflow** When the account clicks
+   **Deploy**, the new workflow is sent to the Management Agent.
+7. **Store config** The workflow is stored in the
+   configuration.
+8. **Read config** The workflow engine producer (WEP) reads
+   the configuration.
+9. **Execute workflow** The WEP executes the workflow.
+10. **Plugin1 queue** If, for example, the first step of the
+    workflow were to feed the plugin queue with events
+    coming from a specific location (as required by the
+    plugins), with plugins only needing to be launched at
+    specific times (per a crontab), the WMP would manage
+    only the output queue.
+11. **Produce plugin1** The events for the first plugin (for
+    example, objects’ metadata) are queued in the dedicated  
+    plugin1 queue.
+12. **Consume plugin1** The Workflow Engine Consumer (WEC)
+    reads the events for the first plugin.
+13. **Call plugin1** For each event in the queue, the WEC
+    calls plugin1 with a REST interface. By default, only
+    the objects’ metadata is sent along. If the plugin
+    requires data, it can use the location:objectId and ask
+    CloudServer.
+14. **Output plugin1** For each input event, an output event
+    is returned to the WEC.
+15. **Plugin2 queue** The WEC (acting as a WEP) feeds the
+    second plugin input queue.
+16. **Produce plugin2** Metadata is queued for plugin2
+    consumption.
+17. **Consume plugin2** The WEC consumes the queue.
+18. **Call plugin2** Plugin2 is called on a REST interface.
+    If plugin2 is a terminator plugin, the workflow ends
+    here.
 
 ### Alternatives
 
-What are other ways we could implement this, and why are we not using these.
-
+What are other ways we could implement this, and why are we
+not using them?
