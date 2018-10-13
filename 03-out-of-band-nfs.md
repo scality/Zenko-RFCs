@@ -10,7 +10,7 @@ Currently, the only way to manage any data on Zenko that you have on a file syst
 
 ## Use-cases Description
 
-Leverage Zenko features - multi-cloud replication, metadata search, lifecycle policies, and such - on your filesystem data transparently.  
+Leverage Zenko features - multi-cloud replication, metadata search, lifecycle policies, and such - on your filesystem data transparently.
 
 ## Technical Details
 
@@ -26,7 +26,7 @@ The manager will update the configuration of the Cloudserver containers to mount
 
 #### CronJobs
 
-Utilizing rclone, each CronJob will deploy a pod that has the duty of syncing the metadata from the NFS mount to Cloudserver on the schedule provided. Rclone will sync each object using a special header to signify the NFS backed files that includes an MD5 and size. These jobs will run until completion and will not schedule another job until the previous has finished. 
+Utilizing rclone, each CronJob will deploy a pod that has the duty of syncing the metadata from the NFS mount to Cloudserver on the schedule provided. Rclone will sync each object using a special header to signify the NFS backed files that includes an MD5 and size. These jobs will run until completion and will not schedule another job until the previous has finished.
 
 Optimizations can be made in V2 to allow the manager to run sooner based on things like geosync logs for hinting and listing/attribute cache to speed up the listing.
 
@@ -40,7 +40,7 @@ Optimizations can be made in V2 to allow the manager to run sooner based on thin
   With SYS_ADMIN or similar capabilities applied to each of the cloudserver containers, they would be able to directly “mount” to an NFS directly which would greatly simplify configuration. However, this opens the door to potentially severe security risk because cloudserver is an externally exposed service (in fact, the only one).
 
 - **Option 2: A userspace NFS client**
-  With a userland NFS client, such as [node-nfsc](https://github.com/scality/node-nfsc), the Cloudserver pods would be able to safely mount the the NFS exports. Reading and writing would 
+  With a userland NFS client, such as [node-nfsc](https://github.com/scality/node-nfsc), the Cloudserver pods would be able to safely mount the the NFS exports. Reading and writing would
   Issues:
     - Performance: We would have to implement correct connection pooling and parallelism to be credible
     - NFS compatibility: it would be hard to be compatible with all NFS servers existing, compared to using the Linux in kernel NFS client which is proven
@@ -53,47 +53,48 @@ Optimizations can be made in V2 to allow the manager to run sooner based on thin
 
 ## Design Diagram
 
-```
-          +---------------------------------------------------------------------------------+
-          |                                                                                 |
-          |                  +-------------------------------------------------------+      |
-          |                  |                                                       |      |
-+-------+ | +----------------v-----------------+             +--------------+        |      |
-|       | | |                                  |             |              |        |      |
-|       | | |                                  |             |              |        |      |
-| Orbit +--->           CloudServer            <-------------+ CloudServer  |        |      |
-| (UI)  | | |            Pods (x50)            |             | Deployment   |   +----v----+ |
-|       | | |                                  |             |              |   |         | |
-|       | | |                                  |             |              |   |         | |
-+-------+ | +------^-------------------^---^---+             +-------^------+   |         | |
-          |        |                   |   |                         |          | MongoDB | |
-          |        |                   |   |    +-----------+        |          |         | |
-          |        |                   |   +----+Rclone Jobs<----+   |          |         | |
-          |        |                   |        +-----------+    |   |          |         | |
-          |        |                   |                         |   |          +----^----+ |
-          | +------v-------+    +------v-------+                 |   |               |      |
-          | |              |    |              |                 |   |               |      |
-          | | /export1 PVC |    | /export2 PVC <------+          |   |               |      |
-          | |              |    |              |      |      +---+---+------+        |      |
-          | +------^-------+    +------^-------+      |      |              | Online |      |
-          |        |                   |              +------+              <--------+      |
-          |        |                   |                     |  Atmoshpere  |               |
-          | +------v-------+    +------v-------+      +------+              <--------+      |
-          | |              |    |              |      |      |              | Offline|      |
-          | |    NFS PV    |    |    NFS PV    |      |      +--------------+        |      |
-          | |   /export1   |    |   /export2   <------+                              |      |
-          | |              |    |              |                   Zenko             |      |
-          | +------^-------+    +------^-------+                   (k8s)             |      |
-          |        |                   |                                             |      |
-          +---------------------------------------------------------------------------------+
-                   |                   |                                             |
-          +---------------------------------------------------------+          +-----+------+
-          |        |                   |                            |          |            |
-          | +------v-------+    +------v-------+                    |          |            |
-          | |   /export1   |    |   /export2   |     NFS Server     |          |  Helm/Cli  |
-          | +--------------+    +--------------+                    |          |            |
-          |                                                         |          |            |
-          +---------------------------------------------------------+          +------------+
+```ascii
+                              +---------------------+
+                              |        Orbit        |
+                              +----------^----------+
+                                         |
++---------------------------------------------------------------------------------+
+|                                        |                                        |
+|                             +----------v----------+             +-------------+ |
+|                             |                     <------------->             | |
+|        +-------------------->     CloudServer     |             |   MongoDB   | |
+|        |                    |                     <----------+  |             | |
+|        |                    +----------^----------+          |  +------+------+ |
+|        |                               |                     |         |        |
+|        |                               |             +-----------------+        |
+|        |                    +----------v----------+  |       |                  |
+|        |         +---------->   FS API Gateway    <-------------------+         |
+|        |         |          +----------^----------+  |       |        |         |
+|        |         |                     |             |       |        |         |
+|        |         |                     |     +-------+       |        |         |
+|    +---+----+----v----+                |     |          +----+---+----v----+    |
+|    |        |         |     +----------+-----v----+     |        |         |    |
+|    | RClone | FS-Data |     |                     |     | RClone | FS-Data |    |
+|    |        |         <-----+     Atmosphere      +----->        |         |    |
+|    +--------+---------+     |                     |     +--------+---------+    |
+|    |       PVC        |     +----+------------+---+     |       PVC        |    |
+|    +--------^---------+          |            |         +--------^---------+    |
+|             |                    |            |                  |              |
+|             |                    |            |                  |              |
+|    +--------v---------+          |            |         +--------v---------+    |
+|    |                  |          |            |         |                  |    |
+|    |    In-tree PV    <----------+            +--------->  Out-of-tree PV  |    |
+|    |    (i.e. NFS)    |                                 |    (i.e. SMB)    |    |
+|    |                  |                                 |                  |    |
+|    +--------^---------+                                 +--------^---------+    |
+|             |                                                    |              |
++---------------------------------------------------------------------------------+
+              |                                                    |
+     +--------v---------+                                 +--------v---------+
+     |                  |                                 |                  |
+     |    NFS Server    |                                 |    SMB Server    |
+     |                  |                                 |                  |
+     +------------------+                                 +------------------+
 ```
 
 
