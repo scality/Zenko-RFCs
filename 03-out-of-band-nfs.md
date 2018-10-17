@@ -30,11 +30,7 @@ In short, a manager called Atmosphere will *watch* MongoDB for configuration upd
 
 ##### Atmosphere
 
-TODO
-
-##### Hubble
-
-Hubble is an API Gateway. It is the only known endpoint by Cloudserver that corresponds to the "Cosmos" backends. Whenever Atmosphere provisions a PV and a Cosmos pod, it will update Hubble so that it routes Cloudserver requests to the appropiate Cosmos pod based on a storage location header (or the bucket name).  
+The role of the Atmosphere manager is to create the Kubernetes PV and apply a new deployment of pods that will have the appropriate claim on the newly provisioned PV. In the future we would want the pod deployments to be taken over by a Zenko Operator.
 
 ##### Cosmos
 
@@ -88,9 +84,23 @@ Currently, there are **NO** alternatives for the "Cosmos" framework. However, th
   - HEAD or GET on an object: stat(3) the targeted file, update the object's representation in mongodb if relevant, then cloudserver proceeds with serving the file
   - Listing without prefix: proceed with the recursive listing of the filesystem (modulo the maxKeys parameter) and update the objects/"directory placeholders" in mongodb if relevant (I just made it up, I'm not certain about this part).
 
+  **Pros:**
+
+  - No need for rclone
+
+  **Cons:**
+
+  - There is a complication when file system clients perform partial updates of the files
+
+  - Only happens with specific file system workloads, e.g. random writes. And this constraint can be easily understood (or stated as not optimized)
+
+  - The first HEAD/GET on the partially modified file the mongodb image gets updated
+
+  - Races between readdir and stat are more commonly understood, which can be ok as long as the former returns the truth about the file.
+
 ### Roadmap
 
-
+TODO
 
 ### Design Diagram
 
@@ -137,27 +147,4 @@ Currently, there are **NO** alternatives for the "Cosmos" framework. However, th
      |                  |                                 |                  |
      +------------------+                                 +------------------+
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
