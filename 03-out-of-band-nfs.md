@@ -42,7 +42,7 @@ The Cosmos pod consists of 2 containers:
 
 - FS-DATA: A RESTful HTTP server that can stream data from its underlying filesystem to whomever requests for it (i.e. Cloudserver).
 
-- RClone-Daemon: TODO
+- RClone-Daemon: A daemon will run an rclone process in a cronjob fashion to sync data on the filesystem with MongoDB. It would do so by making requests to cloudserver, and each object put will be have a special header to signify it is a *filesystem-backed* file. This header will include an MD5 and size.
 
 These two pods will share a mount which corresponds to a PersistentVolume of the desired backend type (NFS, SMB, and so on). 
 
@@ -94,7 +94,7 @@ Currently, there are **NO** alternatives for the "Cosmos" framework. However, th
 
 ### Design Diagram
 
-```sh
+```ascii
                               +---------------------+
                               |        Orbit        |
                               +----------^----------+
