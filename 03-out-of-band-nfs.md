@@ -12,7 +12,7 @@ Currently, Zenko can only manage data that is stored locally, in the cloud, or i
 
 ### Use-cases Description
 
-Leverage Zenko features (multi-cloud replication, metadata search, lifecycle policies, and such) on any of the following backends transparently:
+Leverage Zenko features (multi-cloud replication, metadata search, lifecycle policies, and such) on data stored in any of the following backends transparently:
 
 - NFS
 
@@ -26,11 +26,11 @@ Leverage Zenko features (multi-cloud replication, metadata search, lifecycle pol
 
 ### Technical Details
 
-In short, a manager called Atmosphere will *watch* MongoDB for configuration updates. If a new storage location of type *"filesystem"* is added, then Atmoshpere will provision a "Cosmos" pod and a persistent volume of the desired type (see above). This pod will then serve that data underlying the PersistentVolume over HTTP to Cloudserver, similarly to how S3-Data does it. Additionally, this pod will syncrhonize/ingest pre-existing data and data not created through Zenko chronologically.
+In short, a manager called *Atmosphere* will watch MongoDB for configuration updates. If a new storage location of type "filesystem" is added, then *Atmoshpere* will provision a *Cosmos* pod and a persistent volume of the desired type (see above). This pod will then serve that data underlying the PersistentVolume over HTTP to Cloudserver, similarly to how S3-Data does it. Additionally, this pod will syncrhonize/ingest pre-existing data and data not created through Zenko chronologically.
 
 ##### Atmosphere
 
-The role of the Atmosphere manager is to create the Kubernetes PV and apply a new deployment of pods that will have the appropriate claim on the newly provisioned PV. In the future we would want the pod deployments to be taken over by a Zenko Operator.
+The role of Atmosphere is to create *Kubernetes Persistent Volumes* (PVs) and apply a new deployment of pods that will have the appropriate claim (PVC) on the newly provisioned PV. In the future we would want the pod deployments to be taken over by the Zenko Operator and let Atmoshphere just handle the PV dynamic provisioning.
 
 ##### Cosmos
 
@@ -38,7 +38,7 @@ The Cosmos pod consists of 2 containers:
 
 - FS-DATA: A RESTful HTTP server that can stream data from its underlying filesystem to whomever requests for it (i.e. Cloudserver).
 
-- RClone-Daemon: A daemon will run an rclone process in a cronjob fashion to sync data on the filesystem with MongoDB. It would do so by making requests to cloudserver, and each object put will be have a special header to signify it is a *filesystem-backed* file. This header will include an MD5 and size.
+- RClone-Daemon: A daemon will run an rclone process in a cronjob fashion to sync data on the filesystem with MongoDB. It would do so by making requests to cloudserver, and each object put will be have a special header to signify it is a *filesystem-backed* file. This header will include the MD5 and size of a file.
 
 These two pods will share a mount which corresponds to a PersistentVolume of the desired backend type (NFS, SMB, and so on). 
 
@@ -53,7 +53,7 @@ Currently, there are **NO** alternatives for the "Cosmos" framework. However, th
 
   **Pros:**
 
-  -    Easy to implement
+  - Easy to implement
 
   **Cons:**
 
@@ -86,21 +86,25 @@ Currently, there are **NO** alternatives for the "Cosmos" framework. However, th
 
   **Pros:**
 
-  - No need for rclone
+  - No need for rclone.
 
   **Cons:**
 
-  - There is a complication when file system clients perform partial updates of the files
+  - There is a complication when file system clients perform partial updates of the files.
 
-  - Only happens with specific file system workloads, e.g. random writes. And this constraint can be easily understood (or stated as not optimized)
+  - Only happens with specific file system workloads, e.g. random writes. And this constraint can be easily understood (or stated as not optimized).
 
-  - The first HEAD/GET on the partially modified file the mongodb image gets updated
+  - The first HEAD/GET on the partially modified file the mongodb image gets updated.
 
   - Races between readdir and stat are more commonly understood, which can be ok as long as the former returns the truth about the file.
 
 ### Roadmap
 
-TODO
+- v1: Readonly capabilites. The goal is only to be able to ingest data from a NAS.
+
+- v2: Support for deleting files through Zenko (i.e. lifecycle policies).
+
+- v3: Write functionality. Full control of NAS-backed data through Zenko.
 
 ### Design Diagram
 
@@ -147,4 +151,3 @@ TODO
      |                  |                                 |                  |
      +------------------+                                 +------------------+
 ```
-
