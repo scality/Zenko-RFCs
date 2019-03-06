@@ -1,0 +1,130 @@
+# Object Lifecycle Management
+
+## OVERVIEW
+## Overview
+
+The purpose is to apply various lifecycle actions to objects after a
+certain time has passed since object creation, per lifecycle rules as
+specified in AWS S3 APIs.
+
+### EXPIRATION
+### Expiration
+
+We support expiration of versioned or non-versioned objects, when a
+number of days have passed since their creation.
+number of days have passed since their creation, or after a specific
+date (for current versions). We can additionally filter target objects
+by prefix or by tags.
+
+One important use case is to allow automatic deletion of older
+versions of versioned objects to reclaim storage space.
+
+## DESIGN
+### Transition Policies
+
+The implementation of lifecycle in S3 connector comprises several
+components which, by working together provide lifecycle
+functionalities.
+Transition policies allow to transition object data from one location
+to another one automatically, usually to a slower but cheaper location
+for old or infrequently-accessed data.
+
+Most components rely on Kafka and Zookeeper to pass state to each
+On versioned buckets, it can apply to current version data, as well as
+noncurrent versions, depending on the rule.
+
+AWS-specific transitions, e.g. to STANDARD_IA or GLACIER storage
+classes is not yet supported through Zenko, if needed, it has to be
+set directly on AWS.
+
+## Design
+
+The implementation of Object Lifecycle Management comprises several
+components which, together, provide the functionality.
+
+Most components rely on Kafka and Zookeeper to communicate with each
+other.
+
+### Workflow Overview
+@@ -54,24 +68,25 @@ from bucket *foobucket*:
+    |    |                              /-------------------\___________/
+    |    |                 _____________v___
+    |    |                /                 \
+    |    |                |   Conductor     | foobucket@null ___________
+    |    |                |   Conductor     | process:foobucket_________
+    |    |                \_________________/-------------->/           \
+    |    |                                                  |           |
+    |    | GET /foobucket?lifecycle                         |   KAFKA   |
+    |    | list foobucket (max n) => obj@v1                 |           |
+    |    |                 _________________                |           |
+    |    |                /                 \<--------------\___________/
+    |    \----------------|   Producer      |foobucket@marker  ^    ^  |
+    |                     |                 |                  |    |  |
+    |                     \_________________/------------------/    |  |
+    |                                  |    expire foobucket/obj@v1 |  |
+    |    |                __________________   process:     |           |
+    |    |               /                  \<--------------\___________/
+    |    \---------------|   Lifecycle      |foobucket@marker  ^    ^  |
+    |                    | Bucket Processor |                  |    |  |
+    |                    \_____________ ____/------------------/    |  |
+    |                                  |    expire:foobucket/obj@v1 |  |
+    |                                  |                            |  |
+    |                                  \----------------------------/  |
+    | DELETE foobucket/obj@v1               foobucket@(marker+n)       |
+    |                      _________________                           |
+    \---------------------/                 \<-------------------------/
+                          |   Consumer      |  expire foobucket/obj@v1
+                          \_________________/
+    | DELETE foobucket/obj@v1            process:foobucket@(marker+n)  |
+    |                     __________________                           |
+    \--------------------/                  \<-------------------------/
+                         |    Lifecycle     |  expire:foobucket/obj@v1
+                         | Object Processor |
+                         \__________________/
+```
+
+@@ -81,21 +96,26 @@ from bucket *foobucket*:
+
+* Queue populator (extended as explained below)
+* Conductor
+* Producer
+* Consumer
+* Bucket Processor
+* Object Processor
+
+#### Kafka topics for lifecycle
+
+* backbeat-lifecycle-bucket-tasks
+* backbeat-lifecycle-object-tasks
+* backbeat-lifecycle-object-tasks (expiration only)
+
+#### Kafka topics shared between CRR and lifecycle transitions
+
+* backbeat-replication
+* backbeat-replication-status
+
+#### Zookeeper paths
+
+* /[chroot_path]/lifecycle/data/buckets/${ownerId}:${bucket}
+* /[chroot_path]/lifecycle/data/buckets/${ownerId}:${bucketUID}:${bucketName}
+* /[chroot_path]/lifecycle/run/backlog-metrics/${topic}/${partition}/topic
+* /[chroot_path]/lifecycle/run/backlog-metrics/${topic}/${partition}/consumers/${groupId}
+
+### S3 Connector
+### CloudServer
+
+The S3 API provides three calls to manage lifecycle properties per bucket:
+
+@@ -108,6 +128,23 @@ See AWS specs for details on the protocol format.
+Those calls essentially manage bucket attributes related to lifecycle
+behavior, which are stored as part of bucket metadata.
+
+#### Transition policies support in CloudServer
+
+Transition policies rely on the *preferred read location* for an
+object.
+
+We introduce an optional per-object *preferred read location*. If set,
+it is used to determine which location to read the object from on a
+GET request. It overrides the *preferred read location* defined in the
+bucket replication configuration (if any).
