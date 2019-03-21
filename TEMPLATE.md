@@ -1,13 +1,11 @@
 
-# ZIP#x (Zenko Improvement Proposal #x) - CLEAR TITLE
-
 ## Overview
 
-Short paragraph to explain what this ZIP is about.
+Short paragraph to explain what this spec is about.
 
 ## Problem Description
 
-Detailed explanation of the problem space of the ZIP. Use as many
+Detailed explanation of the problem space of the spec. Use as many
 words as necessary.
 
 ## Use-cases Description
