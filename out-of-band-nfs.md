@@ -1,5 +1,5 @@
 <h1 align="center">
-ZIP#3 (Zenko Improvement Proposal)<br>The "Cosmos" Storage Backend
+Out-of-band Updates from File Systems<br>The "Cosmos" Storage Backend
 </h1>
 
 ### Overview

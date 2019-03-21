@@ -18,7 +18,7 @@ users, deployers, etc.
 
 ## Technical Details
 
-Describe in details how the ZIP will be implemented. Which components
+Describe in details how the spec will be implemented. Which components
 will be modified, how, the protocols, mechanisms, etc. Use pseudo-code
 and anything that will help reviewers understand what you have in
 mind.
