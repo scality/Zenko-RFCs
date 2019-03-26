@@ -1,0 +1,13 @@
+site_name: Zenko Specifications
+docs_dir: specs
+theme:
+    name: readthedocs
+    custom_dir: template/
+    extra_css:
+        - template/classic.css
+        - template/custom.css
+    include_sidebar: false
+nav:
+    - Home: readme.md
+    - First spec: 01-workflow-engine.md
+    - Template spec: 00-TEMPLATE.md
