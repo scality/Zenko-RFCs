@@ -1,4 +1,4 @@
-# bucket_mem design
+# bucket_api design
 
 ## RATIONALE
 
