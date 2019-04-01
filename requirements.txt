@@ -24,9 +24,9 @@ livereload==2.6.0 \
     --hash=sha256:29cadfabcedd12eed792e0131991235b9d4764d4474bed75cf525f57109ec0a2 \
     --hash=sha256:e632a6cd1d349155c1d7f13a65be873b38f43ef02961804a1bba8d817fa649a7 \
     # via mkdocs
-markdown==3.0.1 \
-    --hash=sha256:c00429bd503a47ec88d5e30a751e147dcb4c6889663cd3e2ba0afe858e009baa \
-    --hash=sha256:d02e0f9b04c500cde6637c11ad7c72671f359b87b9fe924b2383649d8841db7c \
+markdown==3.1 \
+    --hash=sha256:fc4a6f69a656b8d858d7503bda633f4dd63c2d70cf80abdc6eafa64c4ae8c250 \
+    --hash=sha256:fe463ff51e679377e3624984c829022e2cfb3be5518726b06f608a07a3aad680 \
     # via mkdocs
 markupsafe==1.1.1 \
     --hash=sha256:00bc623926325b26bb9605ae9eae8a215691f33cae5df11ca5424f06f2d1f473 \
