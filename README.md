@@ -1,4 +1,4 @@
-# Zenko architecture and specifications working documents
+# Zenko Specifications
 
 This repository contains details about the designs of Zenko features.
 [Zenko](https://www.zenko.io) is software that provides multi-cloud
@@ -19,21 +19,21 @@ data and avoid the lock-in they have experienced with IT vendors.
 
 ## Structure of this repository
 
-This repository contains specifications for improvements to Zenko,
-called ZIP (Zenko Improvement Proposal). They follow a template:
+This repository contains specifications for improvements to Zenko.
+They follow a template:
 
-- Sequential number and a clear title
-- An overview that contains a description of the problem that the ZIP
-  wants to solve
+- Clear title and lowercase-dashed name
+- An overview that contains a description of the problem that we
+  want to solve
 - One or more use cases, with a clear mention of the actors in each
   use case
 - Then a detailed description of the technical implementation
-- To complete the ZIP, a review of alternative approaches to solve the
+- A review of alternative approaches to solve the
   problem. This will show that the proposal has been analyzed at depth
   (think of this as bibliographic reference)
 
-## How to add a ZIP
+## How to add a spec
 
-Anybody can add a Zenko Improvement Proposal: clone the repository,
-create a copy of the file 00-ZIP-TEMPLATE.md and submit a pull request
+Anybody can add a spec: clone the repository,
+create a copy of the file TEMPLATE.md and submit a pull request
 with your proposal. The PR will be reviewed by Zenko team.
