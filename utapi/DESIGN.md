@@ -12,7 +12,7 @@ service's history.
 ## Problem Description
 
 Utapi needs to provide a scalable solution to accurately track metrics across
-any number of nodes while providing reliable storage of historic data. The
+any number of nodes while providing reliable storage of its historic data. The
 system should be highly available to avoid losing data and affecting the
 quality of the provided metrics. It should be able to tolerate node and service
 failures and be able to repair it's data in the event of a failure.
@@ -124,14 +124,14 @@ operation it ingests, `objectDelta`, `bytesDelta`, `ingress`, and `egress`.
 They reflect how an operation affects the computed metric counters and can be
 both positive and negative.
 
-For example, a upload of a 100 byte object to a new key would have the values:
+For example, an upload of a 100 byte object to a new key would have the values:
 
 ```json
 {
-	"objectDelta": 1,
-	"bytesDelta": 100,
-	"ingress": 100,
-	"egress": 0
+  "objectDelta": 1,
+  "bytesDelta": 100,
+  "ingress": 100,
+  "egress": 0
 }
 ```
 
@@ -139,15 +139,15 @@ Deleting the same object would have
 
 ```json
 {
-	"objectDelta": -1,
-	"bytesDelta": -100,
-	"ingress": 0,
-	"egress": 0
+  "objectDelta": -1,
+  "bytesDelta": -100,
+  "ingress": 0,
+  "egress": 0
 }
 ```
 
-Each event can  also have attached metadata such as the `account` , `bucket`,
-or `location` of the effected resource. These are attached as Warp10 `labels`
+Each event can also have attached metadata such as the `account` , `bucket`,
+or `location` of the affected resource. These are attached as Warp10 `labels`
 to the event and are used during checkpoint creation to create the various
 levels of metrics.
 
@@ -158,8 +158,8 @@ we can use to compute metrics. They are created using a timestamp and a list of
 `label` names to index. Each provided `label` creates a "level" of metrics and
 a checkpoint will be created for each unique `label` name/value pair
 encountered.  Starting at the end timestamp a previously created master
-checkpoint is search for, it's timestamp will be used for the start of the
-checkpointed ranged. If no previous master checkpoint is found a timestamp of
+checkpoint is search for, its timestamp will be used for the start of the
+checkpointed range. If no previous master checkpoint is found a timestamp of
 `0` is used, causing all events to be scanned. Events during the calculated
 time range are retrieved and iterated over. If any of the specified `labels`
 are seen the event's values are taken and summed with any previous values
@@ -223,7 +223,7 @@ Will produce these two snapshots:
 
 In a distributed system node or network failures can cause events to not be
 immediately ingested into Utapi and can cause problems for a system rely on a
-strict ordering of historic events. To guard against this Utapi implements a
+static ordering of historic events. To guard against this Utapi implements a
 system for asynchronous repairs of checkpoints and snapshots. During the
 Redis -> Warp10 transition Utapi performs some sanity checks to determine if
 the inserted metrics could have already included in a checkpoint. If so the
@@ -283,7 +283,7 @@ triggered if needed.
 
 **Warp10 Unavailable**
 
-If Warp10 is unavailable events are events are persisted in redis until it
+If Warp10 is unavailable events are persisted in redis until it
 becomes available and then batch inserted.
 
 ### Migrations
