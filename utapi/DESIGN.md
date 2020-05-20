@@ -28,9 +28,9 @@ failures and be able to repair it's data in the event of a failure.
                               ^                  |
                               |                  |
                               |                  v
-+-------------+         +------------+   +---------------+         +------+
-| Cloudserver | +-----> |Utapi Server|   |Background Task| +-----> |Warp10|
-+-------------+         +------------+   +---------------+         +------+
++-------------+         +------------+   +---------------+         +-------+
+| Cloudserver | +-----> |Utapi Server|   |Background Task| +-----> |Warp 10|
++-------------+         +------------+   +---------------+         +-------+
 
 ```
 
@@ -38,7 +38,7 @@ failures and be able to repair it's data in the event of a failure.
 
 #### Redis
 
-Utapi uses Redis to cache events before inserting them into Warp10. This is to
+Utapi uses Redis to cache events before inserting them into Warp 10. This is to
 reduce write overhead as batch inserts are more efficient. Each event is JSON
 serialized and stored in a key. Based on its timestamp the event is then sharded
 into a 10 second block and its key is added to a corresponding Set.
@@ -49,9 +49,9 @@ Events are stored using `<prefix>:events:<event uuid>`
 Shards are stored using `<prefix>:shards:<timestamp>`
 `timestamp` is a UNIX style timestamp indicating the beginning of the shard
 
-#### Warp10
+#### Warp 10
 
-Warp10 is used for long term storage and analysis of events in Utapi. In Warp10
+Warp 10 is used for long term storage and analysis of events in Utapi. In Warp 10
 parlance each event is a `measure` consisting of a timestamp, `class`, key value
 pair `labels`, and an associated value.
 
@@ -119,7 +119,7 @@ Utapi defines several classes:
 
 #### Events
 
-Utapi stores four integers, using Warp10's multivariate data type, for every
+Utapi stores four integers, using Warp 10's multivariate data type, for every
 operation it ingests, `objectDelta`, `bytesDelta`, `ingress`, and `egress`.
 They reflect how an operation affects the computed metric counters and can be
 both positive and negative.
@@ -147,7 +147,7 @@ Deleting the same object would have
 ```
 
 Each event can also have attached metadata such as the `account` , `bucket`,
-or `location` of the affected resource. These are attached as Warp10 `labels`
+or `location` of the affected resource. These are attached as Warp 10 `labels`
 to the event and are used during checkpoint creation to create the various
 levels of metrics.
 
@@ -183,7 +183,7 @@ and `bucket1` respectively.
 1000000000000010 utapi.checkpoints{bucket=bucket1} [ 1 100 200 0 { "ops": { "putObject": 2, "deleteObject": 1 } } ]
 ```
 
-After the `events` are scanned each checkpoint is stored as a measure in Warp10
+After the `events` are scanned each checkpoint is stored as a measure in Warp 10
 using the class `utapi.checkpoints`. A single label is attached with the label
 name and value being the level and group of the checkpoint (ie `bucket` and
 `bucket0`) from the example above. This allows us to easily query for a
@@ -225,7 +225,7 @@ In a distributed system node or network failures can cause events to not be
 immediately ingested into Utapi and can cause problems for a system rely on a
 static ordering of historic events. To guard against this Utapi implements a
 system for asynchronous repairs of checkpoints and snapshots. During the
-Redis -> Warp10 transition Utapi performs some sanity checks to determine if
+Redis -> Warp 10 transition Utapi performs some sanity checks to determine if
 the inserted metrics could have already included in a checkpoint. If so the
 repair process is started using the beginning and end of the time range of the
 inserted events as the beginning and end of the repair range. Effected
@@ -281,14 +281,14 @@ in memory up to a limit and then will begin flushing events as special log
 messages. After redis is available, events will be flushed and a repair
 triggered if needed.
 
-**Warp10 Unavailable**
+**Warp 10 Unavailable**
 
-If Warp10 is unavailable events are persisted in redis until it
+If Warp 10 is unavailable events are persisted in redis until it
 becomes available and then batch inserted.
 
 ### Migrations
 
 Migrations from previous customer deployments will require a post upgrade
 tool to be used. This will migrate the historic utapi data in Redis into
-Warp10 and make it available under the new system..
+Warp 10 and make it available under the new system..
 
