@@ -1,41 +1,50 @@
 # [S3C-2862](https://scality.atlassian.net/browse/S3C-2862): UTAPI redesign requirements document
-## Context & Problem to solve
-The current design of the UTAPI is not able to meet the needs of our customers, especially the large company like service providers. Their main goals are:
-* integrate Scality Products with a reporting and/or billing systems
-* be able to create a bill like AWS which is the leader of the public Cloud Provider
-* be able to monitor in near-real the consumption of the services offered by Scality products
 
-Today, they are using UTAPI to **bill and monitor** the consumption of the services provided by S3C connectors to their customers. The mains issues reported are:
+## Context & Problem to solve
+
+The current design of the UTAPI is not able to meet the needs of our customers, especially the large company like service providers. Their main goals are:
+
+* integrate Scality Products with a reporting and/or billing systems
+* be able to create create a bill like AWS, the leader in public cloud
+* be able to monitor in near real-time the consumption of the services offered by Scality products
+
+Today, they are using UTAPI to **bill and monitor** the consumption of the services provided by S3C connectors to their customers. The main issues reported are:
+
 * the impossibility to compute a monthly bill with Hour or even Day granularity
-* the error rate of the amount of data consume reported by the UTAPI(up to 200%)
+* the error rate of the amount of data consumed reported by the UTAPI(up to 200%)
 * the incidents caused by UTAPI resources consumption(e.g: Redis process reach 100% CPU utilization that leads an entire S3C server out of services)
 
 ## Requirements
+
 Requirements are written using user story format to keep the customer context in mind during the redesign.
 
 ### High Level
+
 As a Storage Manager, I want to have a near real-time and accurate view of Storage Account service consumption metrics(described bellow) grouped by service consumption metrics Groups(described below) with a configurable granularity(between 1m to 1h), in order to monitor and bill the usage of the Services.
 
 As a Storage Account Owner, or Data Consumer, I want to have a near real-time and accurate view of Storage Account service consumption metrics grouped by service consumption metrics Groups(described below) with a configurable granularity(between 1m to 1h), in order to observe and monitor the usage of the Services.
 
 Service consumption metrics:
+
 * Storage capacity
 * Number of objects
 * Network utilization transferred ingoing
 * Network utilization transferred outgoing
-* Number of operation
+* Number of operations
 
 Service consumption metrics groups:
+
 * Service
 * Accounts
 * Users
 * Buckets
 * Operation types
 * Region <sup>1<sup>
-* Source IP to allow our customer to bill accordingly to source network <sup>1<sup>
+* Source IP to allow our customer to bill according to source network <sup>1<sup>
 * Storage class <sup>2<sup>
 
 Operation types [extracted from AWS S3 operations][aws_s3_operations]:
+
 * AbortMultipartUpload
 * CompleteMultipartUpload
 * CopyObject
@@ -125,11 +134,13 @@ Operation types [extracted from AWS S3 operations][aws_s3_operations]:
 * UploadPart
 * UploadPartCopy
 
-Foot page notes:
-* 1: not available in the current UTAPI design
-* 2: not available in the Scality Products
+Footnotes:
+
+1. not available in the current UTAPI design
+2. not available in the Scality Products
 
 ### CLI
+
 As a Storage Manager, I want a CLI in order to extract Storage Account's service consumption metrics in order to bill my Storage Account Owner programmatically.
 
 As a Storage Account Owner, I want a CLI in order to extract my Storage Account service consumption metrics in order to create a report programmatically.
@@ -140,6 +151,7 @@ As a Storage Manager, I want an API to extract Storage Account's service consump
 As a Storage Account Owner, I want an API in order to extract my Storage Account service consumption metrics in order to create a report programmatically.
 
 ### UI
+
 As a Storage Manager, I want to have a near real-time display of a Storage Account service consumption metrics in order to observe the usage of a Storage Account.
 
 As a Storage Account Owner, I want to have a near real-time display of my Storage Account service consumption metrics in order to control my usage.
@@ -147,6 +159,7 @@ As a Storage Account Owner, I want to have a near real-time display of my Storag
 As a Storage Account Owner, I want to extract service consumption metrics displayed within the UI choosing the format(e.g: JSON or CSV) and the list of metrics in order to quickly extract the data and create my customer report.
 
 ### Prometheus Exporter
+
 As a Storage Manager, I want a Prometheus Exporter for service consumption metrics in order to pull metrics from a Prometheus server.
 
 As a Storage Manager, I want Prometheus Exporter metrics name prefixed by the exporter name and written in [snake_case][snake_case_description] in order to allow someone who is familiar with Prometheus but not our system to make a good guess as to what a metric means.
@@ -154,6 +167,7 @@ As a Storage Manager, I want Prometheus Exporter metrics name prefixed by the ex
 As a Storage Manager, I want Prometheus Exporter metrics in base units (e.g. seconds, bytes) and ratio instead of percentage in order to leave converting them to something more readable to graphing tools and comply with the [Writing Exporters best practices][writing_exporters].
 
 ### Configuration
+
 As a Storage Administrator, I want to configure the granularity of the Storage Consumption metrics knowing the impacts on my Solution Instance in order to bill my customers according to my company's reporting and/or billing systems.
 
 As a Storage Administrator, I want to configure a downsampling period of service consumption metrics on my Solution Instance knowing the impacts in order to reduce the footprint of the service consumption metrics by reducing the precision of the oldest metrics.
@@ -161,6 +175,7 @@ As a Storage Administrator, I want to configure a downsampling period of service
 As a Storage Administrator, I want to configure a retention period of service consumption metrics on my Solution Instance knowing the impacts in order to reduce the footprint of the service consumption metrics by deleting oldest metrics.
 
 ### Backup/Restore
+
 As a Storage Administrator, I want to be able to backup UTAPI configuration, in order to be able to retrieve it if I have an issue after a configuration change
 
 As a Storage Administrator, I want to be able to version backup configuration, in order to be able to retrieve it if I have an issue after a configuration change.
@@ -168,27 +183,38 @@ As a Storage Administrator, I want to be able to version backup configuration, i
 As a Storage Administrator, I want to be alerted of any impacting configuration change, in order to be able to react.
 
 ### Tests
+
 The new design of the UTAPI must be tested with the use-cases of our customers that are facing issues with the current design.
 
 Scenarios :
-- few objects within 150 millions buckets
-- 35 billions objects within a bucket
-- 8000 op/s
-- 1000 Accounts
+
+* few objects within 150 million buckets
+* 35 billion objects within a bucket
+* 8000 op/s
+* 1000 Accounts
+* buckets with the versionning feature activated
+* buckets with CRR feature activated
+* buckets with a lifecycle policie activated
 
 ### Documentation
+
 As a Storage Manager, I want to know how the service consumption metrics are computed in order to create my service offer on top of Scality Products.
 
-As a Storage Manager, I want a documentation where I can try out the API in order to accelerate the integration of the UTAPI in my company information system.
+As a Storage Manager, I want documentation where I can try out the API in order to accelerate the integration of the UTAPI in my company information system.
 
 ### Updagrade/Downgrade
+
 As a Storage Administrator, I want to upgrade my platform keeping existing metrics in order to take advantage of the UTAPI redesign.
 
 ## Open question
-- do we have to add metrics for CANCELLED operations?
+
+* do we have to add metrics for CANCELLED operations?
+
+## Appendices
 
 ## Divers
 ### Billing and Usage Reports
+
 This table explain all the metrics that are available for an AWS Account Owner with the associated granularity and the units.
 source [Understanding Billing and Usage Reports][aws_billing_usage_types]
 UsageType|Units|Granularity|Description
