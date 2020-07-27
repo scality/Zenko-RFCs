@@ -1,0 +1,17 @@
+site_name: Object Squad Handbook
+theme:
+  name: material
+  palette:
+    scheme: black
+    primary: deep orange
+markdown_extensions:
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_div_format
+extra_javascript:
+  - https://unpkg.com/mermaid@8.5.1/dist/mermaid.min.js
+nav:
+  - Home: 'README.md'
+  - Mermaid: 'mermaid-js.md'
