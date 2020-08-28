@@ -78,7 +78,7 @@ Event types that will need to support:
 
 Event | Description
 ------|------------
-`s3:ObjectCreated:*`, `s3:ObjectCreated:Put`, `s3:ObjectCreated:Post`, `s3:ObjectCreated:Copy`, `s3:ObjectCreated:CompleteMultipartUpload` | Will generate an event respectively every time an object is created (whatever the operation type), written, created, copied, MPU constituted.
+`s3:ObjectCreated:*`, `s3:ObjectCreated:Put`, `s3:ObjectCreated:Copy`, `s3:ObjectCreated:CompleteMultipartUpload` | Will generate an event respectively every time an object is created (whatever the operation type), written, created, copied, MPU constituted.
 `s3:ObjectRemoved:*`, `s3:ObjectRemoved:Delete`, `s3:ObjectRemoved:DeleteMarkerCreated` | Will generate an event respectively every time an object is deleted (whatever the operation type), deleted, or a delete marker is created.
 
 Event types that will need to support eventually (in future releases):
@@ -107,7 +107,7 @@ With the following ARN mapping:
 In S3C the targets will be specified directly in the `group_vars/all` as YAML definitions, e.g.:
 
 ```
-env_bucket_notifications_targets:
+env_bucket_notifications:
   - resource: target1
     type: rabbitmq
     host: <somehost>
@@ -284,7 +284,7 @@ engine (as this kind of problems appeared especially on S3C repds).
                            |                               |
                            |   set filter descriptors (ZK) |
                            +-------------------------------+
-```                                                                                                 
+```
 
 But those load issues have been fixed on S3C so far. The oplog
 management have been correctly abstracted in a class in Backbeat so we
