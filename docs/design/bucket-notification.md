@@ -78,13 +78,14 @@ Event types that will need to support:
 
 Event | Description
 ------|------------
-`s3:ObjectCreated:*`, `s3:ObjectCreated:Put`, `s3:ObjectCreated:Post`, `s3:ObjectCreated:Copy`, `s3:ObjectCreated:CompleteMultipartUpload` | Will generate an event respectively every time an object is created (whatever the operation type), written, created, copied, MPU constituted.
+`s3:ObjectCreated:*`, `s3:ObjectCreated:Put`, `s3:ObjectCreated:Copy`, `s3:ObjectCreated:CompleteMultipartUpload` | Will generate an event respectively every time an object is created (whatever the operation type), written, copied, MPU constituted.
 `s3:ObjectRemoved:*`, `s3:ObjectRemoved:Delete`, `s3:ObjectRemoved:DeleteMarkerCreated` | Will generate an event respectively every time an object is deleted (whatever the operation type), deleted, or a delete marker is created.
 
 Event types that will need to support eventually (in future releases):
 
 Event | Description
 ------|------------
+`s3:ObjectCreated:Post` |  Will generate an event every time an object is created.
 `s3:ObjectRestore:Post`, `s3:ObjectRestore:Completed`| Will generate an event when an object will be restored from an archival storage (e.g. tape, or Glacier)
 `s3:Replication:OperationFailedReplication`, `s3:Replication:OperationMissedThreshold`, `s3:Replication:OperationReplicatedAfterThreshold`, `s3:Replication:OperationNotTracked` | Specific replication related events.
 
