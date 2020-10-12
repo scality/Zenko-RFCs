@@ -108,7 +108,7 @@ With the following ARN mapping:
 In S3C the targets will be specified directly in the `group_vars/all` as YAML definitions, e.g.:
 
 ```
-env_bucket_notifications_targets:
+env_bucket_notifications:
   - resource: target1
     type: rabbitmq
     host: <somehost>
@@ -356,7 +356,7 @@ engine (as this kind of problems appeared especially on S3C repds).
                            |                               |
                            |   set filter descriptors (ZK) |
                            +-------------------------------+
-```                                                                                                 
+```
 
 But those load issues have been fixed on S3C so far. The oplog
 management have been correctly abstracted in a class in Backbeat so we
