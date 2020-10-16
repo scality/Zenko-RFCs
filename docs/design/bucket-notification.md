@@ -78,13 +78,14 @@ Event types that will need to support:
 
 Event | Description
 ------|------------
-`s3:ObjectCreated:*`, `s3:ObjectCreated:Put`, `s3:ObjectCreated:Copy`, `s3:ObjectCreated:CompleteMultipartUpload` | Will generate an event respectively every time an object is created (whatever the operation type), written, created, copied, MPU constituted.
+`s3:ObjectCreated:*`, `s3:ObjectCreated:Put`, `s3:ObjectCreated:Copy`, `s3:ObjectCreated:CompleteMultipartUpload` | Will generate an event respectively every time an object is created (whatever the operation type), written, copied, MPU constituted.
 `s3:ObjectRemoved:*`, `s3:ObjectRemoved:Delete`, `s3:ObjectRemoved:DeleteMarkerCreated` | Will generate an event respectively every time an object is deleted (whatever the operation type), deleted, or a delete marker is created.
 
 Event types that will need to support eventually (in future releases):
 
 Event | Description
 ------|------------
+`s3:ObjectCreated:Post` |  Will generate an event every time an object is created.
 `s3:ObjectRestore:Post`, `s3:ObjectRestore:Completed`| Will generate an event when an object will be restored from an archival storage (e.g. tape, or Glacier)
 `s3:Replication:OperationFailedReplication`, `s3:Replication:OperationMissedThreshold`, `s3:Replication:OperationReplicatedAfterThreshold`, `s3:Replication:OperationNotTracked` | Specific replication related events.
 
@@ -256,7 +257,78 @@ TBD
 
 ## UI
 
-TBD
+The S3 Browser UI needs to be adapted to this new feature, and should target the following user story:
+
+> As a Data Consumer, I want to configure a set of rules to publish notification
+> messages in my queuing systems when activity occurs on a bucket so that
+> I can monitor data-changes within that particular buckets.
+
+The main change will occurs in the View Bucket Info Modal. Three tabs will be
+added:
+
+*   **Overview** will provide a summary of the bucket configuration.
+*   **Object Lock** will provide the ability to configure Object Lock feature.
+*   **Notification** will provide the ability to configure Bucket Notification
+  feature.
+
+### Overview Tab
+
+![Overview Tab](img/bucket-notification/modal-bucket-view-info-tab-overview.png)
+
+Acceptance Criteria:
+*   The overview tab shall contain the old **Overview** section, and the
+  **Permissions** section.
+*   The old **Overview** section name shall be replaced by **Properties**.
+
+### Object Lock Tab
+
+![Notification Tab](img/bucket-notification/modal-bucket-view-info-tab-object-lock.png)
+
+Acceptance Criteria:
+*   The Notification tab shall contain the old **Object Lock Default Settings**
+  section.
+*   The old **Object Lock Default Settings** section name shall be replaced by
+  **Default Settings**.
+
+### Notification Tab
+
+![Notification Tab](img/bucket-notification/modal-bucket-view-info-tab-notification.png)
+
+Acceptance criteria:
+*   The bucket notification configuration must be retrieved and displayed
+  according to the [GetBucketNotificationConfiguration](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketNotificationConfiguration.html) action.
+*   Clicking **ADD NOTIFICATION** button opens [add notification modal](#add-and-edit-notification-modal).
+*   Clicking **Edit** button opens [edit notification modal](#add-and-edit-notification-modal).
+*   Clicking **DELETE** button shall delete all selected rules from the bucket
+  notification using [PutBucketNotificationConfiguration](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketNotificationConfiguration.html)
+  action.
+
+### Add and Edit Notification Modal
+
+![Add Notification Modal](img/bucket-notification/modal-add-notification.png)
+
+![Add Notification Modal](img/bucket-notification/modal-edit-notification.png)
+
+Acceptance criteria:
+*   Pressing the tab key must switch the focus between fields.
+*   If `s3:ObjectCreated:*` event is selected, then `s3:ObjectCreated:Put`,
+  `s3:ObjectCreated:Post`, `s3:ObjectCreated:Copy`, and
+  `s3:ObjectCreated:CompleteMultipartUpload` events can't be checked.
+*   If `s3:ObjectRemoved:*` event is selected, then `s3:ObjectRemoved:Delete`,
+   and `s3:ObjectRemoved:DeleteMarkerCreated` events can't be checked.
+*   Clicking **ADD NOTIFICATION RULE** and **EDIT NOTIFICATION RULE** shall
+  update the bucket notification configuration according to inputs using [PutBucketNotificationConfiguration](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketNotificationConfiguration.html) action.
+
+### Alternatives
+
+We could have leveraged tabs on the main pages to avoid modal, and provide
+a better UX. But, the development cost of that change is not compatible with
+our deadlines, and the S3 Browser will be replaced by XDM UI offline in 2021.
+
+### List of Improvements
+
+*   Suggest the ARNs during the bucket notification configuration.
+*   Provide the ability to create the destination queues.
 
 ## Alternatives
 
