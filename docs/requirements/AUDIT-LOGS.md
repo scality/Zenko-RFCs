@@ -31,8 +31,8 @@ Acceptance Criteria:
 
 ### IAM ressources definition
 
-IAM ressources can be:
-
+IAM resources can be:
+* Account
 * Users
 * Policies
 * Groups
