@@ -15,7 +15,7 @@ Acceptance Criteria:
 * Audit logs must be formatted using LEEF format
 * Audit logs must be self-descriptive, that means a Storage Administrator don't need to correlate multiple log lines or log files to know who perform an action on a ressource
 * In case of an integration with an External Identity Provider(using web identity or SAML federation), the 'who' must be the External Identity login or username
-* Failed action must appear in the Audit logs with the reason of failed (e.g: wrong signature, or privileges...)
+* * Failed action must appear in the Audit logs with the reason of failure (e.g: wrong signature, random credentials or privileges...)
 * Audit logs should be included into sreport
 * Audit logs rotation, purge, activation, desactivation must be configurable
 * Audit logs configuration, activation, desactivation must be documented
