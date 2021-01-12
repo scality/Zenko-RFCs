@@ -1,4 +1,7 @@
 site_name: Object Squad Handbook
+site_url: https://scality.github.io/citadel
+repo_url: https://github.com/scality/citadel
+edit_uri: 'edit/development/1.0/docs/'
 theme:
   name: material
   palette:
@@ -13,5 +16,11 @@ markdown_extensions:
 extra_javascript:
   - https://unpkg.com/mermaid@8.5.1/dist/mermaid.min.js
 nav:
-  - Home: 'README.md'
-  - Mermaid: 'mermaid-js.md'
+  - Design:
+    - 'General': 'design/index.md'
+    - 'Bucket Notifications': 'design/bucket-notification.md'
+    - 'Object Lock': 'design/object-lock.md'
+    - 'UTAPI': 'design/utapi.md'
+  - Release:
+    - 'General': 'release/index.md'
+    - 'Disconnecting': 'release/disconnecting.md'
