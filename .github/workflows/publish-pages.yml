@@ -19,4 +19,4 @@ jobs:
         pip install -r requirements.txt
     - name: Deploy site
       run: |
-        mkdocs gh-deploy
+        mkdocs gh-deploy --clean --force

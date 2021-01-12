@@ -11,6 +11,7 @@ For example, Arsenal, CloudServer, and Backbeat.
 Let's treat them as we would any open-source component we use in a project.
 
 Each component must contain:
+
 * Unit and functional tests to ensure that the component works.
 * Documentation explaining the services the component provides, and how to contribute, build, test, configure, run, use, and (potentially) monitor the component.
 * Release notes
@@ -28,6 +29,7 @@ Release notes are provided with each release.
 ## Project Repositories
 
 The purpose of a project repository is to:
+
 * Select components (developed in-house or from open source projects) by version. 
 * Create a build chain that outputs the desired installation code and packages.
 * Trigger integration tests that ensure all selected components interoperate effectively.
@@ -46,7 +48,8 @@ Release readiness is determined by the project owner.
 
 Product repositories contain the code and documentation that are shipped to the customer.
 
-The purpose of a product repository is to: 
+The purpose of a product repository is to:
+
 * Assemble projects and components, maintaining their respective version numbers.
 * Create a build chain that outputs the desired installation code and packages.
 * Trigger integration tests that ensure all selected projects interoperate effectively.
