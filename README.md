@@ -5,9 +5,11 @@ Design
 - [Bucket Notifications](docs/design/bucket-notification.md)
 - [Object Lock](docs/design/object-lock.md)
 
+[Release Process](./docs/release/index.md)
+
 Requirements
 
-## Structure of this repository
+## Structure of this Repository
 
 This repository contains requirements and design for Scality S3 and Zenko.
 They follow a template:
