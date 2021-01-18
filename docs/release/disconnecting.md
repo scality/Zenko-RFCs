@@ -34,7 +34,7 @@ The purpose of a project repository is to:
 * Create a build chain that outputs the desired installation code and packages.
 * Trigger integration tests that ensure all selected components interoperate effectively.
 * Document the project's services, and how to build, test, configure, run, monitor, and contribute to the project.
-* Offer [release notes](./release-notes.md) that document changes in the product's function and features.
+* Offer [release notes](./release-notes.md) that document changes in the project's function and features.
 
 Project releases should be kept as small as possible.
 For example, bumping the version of a component might unlock features or bugfixes.
@@ -54,7 +54,7 @@ The purpose of a product repository is to:
 * Create a build chain that outputs the desired installation code and packages.
 * Trigger integration tests that ensure all selected projects interoperate effectively.
 * Document the product's services; how to install, configure, run, and monitor the product; and how to solve product issues.
-* Offer [release notes](./release-notes.md) that document changes in the project's function and features.
+* Offer release notes that document changes in the product's function and features.
 
 Product releases are driven by customer needs and are not defined within the object squad. 
 The object squad, however, is responsible for making project releases available to the product and for helping integrate the projects into the product. 
