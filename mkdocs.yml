@@ -21,6 +21,7 @@ nav:
     - 'Bucket Notifications': 'design/bucket-notification.md'
     - 'Object Lock': 'design/object-lock.md'
     - 'UTAPI': 'design/utapi.md'
+    - 'Ballot Launcher': 'design/ballot-launcher.md'
   - Release:
     - 'General': 'release/index.md'
     - 'Disconnecting': 'release/disconnecting.md'
