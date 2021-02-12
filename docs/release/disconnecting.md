@@ -23,7 +23,7 @@ The number of component releases, therefore, does not affect the product release
 Selecting a component should be as easy and understandable as picking one from the open source world either from it’s proper language registry (like, for example, bumping the version on the `package.json` file for Node.js projects) or pulling a Docker image from a registry.
 The component must therefore make those packages or images available.
 
-Each component release is made by the project leader with the help of the CI chapter, advertised internally and externally if needed.
+Any member of the object squad can release a component. They can ask the CI chapter for help publicly or privately if it's needed.
 Release notes are provided with each release.
 
 ## Project Repositories
