@@ -16,6 +16,8 @@ markdown_extensions:
 extra_javascript:
   - https://unpkg.com/mermaid@8.5.1/dist/mermaid.min.js
 nav:
+  - Requirements:
+    - 'S3 Replication Monitoring': 'requirements/s3-replication-monitoring.md'
   - Design:
     - 'General': 'design/index.md'
     - 'Bucket Notifications': 'design/bucket-notification.md'
