@@ -9,7 +9,10 @@ SEC 17a-4 compliance.
 ## Requirements
 
 * Object lock flag must be set during bucket creation
-* Versioning has to be enabled on the bucket
+
+* Versioning has to be enabled on the bucket (it is enabled
+  automatically at creation time when object lock flag is set)
+
 * Object lock must be enabled on a bucket in order to write a lock configuration
   using the PUT Object Lock Configuration api that has object lock flag set
 
@@ -25,8 +28,10 @@ Scality can be used [see migration tool section](#migration-tool).
 When set on an object version, a lock prevents deletes and overwrites on that
 version until the lock expires. However, the lock doesn't prevent creation of
 delete markers or new versions on top of the locked version.
-Object locking is also immune to Lifecycle actions i.e a Lifecycle expiry rule
-cannot delete an object version until the lock on the object expires.
+
+Object locking also protects objects from Lifecycle actions, i.e
+a Lifecycle expiry rule cannot delete an object version until the lock
+on the object expires.
 
 ## Controlling locking of an object
 
@@ -95,20 +100,27 @@ as part of the bucket metadata.
 When a PUT Object request is received, the lock configuration is evaluated and
 the lock expiration date and time is calculated and set as `retain-until-date`
 property on the object's metadata.
-Lock configuration on a PUT object request is evaluated the following order
+Lock configuration on a PUT object request is evaluated in the following order:
 
-1. Bucket's configuration for retention mode/period
-2. Object's configuration in the PUT Object for retention mode/period
+1. Object's configuration in the PUT Object for retention mode/period
+
+2. Bucket's configuration for retention mode/period
 
 The object's settings override the bucket's settings when calculating the
 `retain-until-date` date and time to be stored on the object's metadata.
+
 The lock configuration on an object version can also be changed using
-`PutObjectRetention` api request, when the object has no prior retention mode
-set or if the object has `GOVERNANCE` mode set and the user has appropriate
-permission to make the request. When applying `PutObjectRetention` configuration
-on an object that already has a `retain-until-date` set, the newer configuration
-can only be greater than or equal to the current `retain-until-date`, it cannot
-be shortened.
+`PutObjectRetention` api request if the user has appropriate
+permission to make the request, in either of the following cases:
+
+- when the object has no prior retention mode set or if a previous
+  retention policy has already expired
+
+- when the request extends the retention period later than the
+  existing retention deadline
+
+- if the object has `GOVERNANCE` mode set and the request includes the
+  `x-amz-bypass-governance-retention:true` header
 
 Note: Delete markers do not have any object lock protection
 
@@ -117,12 +129,12 @@ Note: Delete markers do not have any object lock protection
 Whenever requests such as DELETE object using version-id,
 Multi-Object DELETE specifying version-id or a Lifecycle action to
 permanently delete the object version are received, the current date and time is
-evaluated against the `retain-until-date` set on the object and the client will
+compared against the `retain-until-date` set on the object and the client will
 receive an `Access Denied` error if the current date and time is less than the
 `retain-until-date` set on the object.
 When the current date and time exceeds the `retain-until-date`, deletes on the
-object version are automatically allowed. There is no cleanup action to remove
-the `retain-until-date` set on the object version's metadata once the
+object version are not prevented by the object lock mechanism. There is no cleanup
+action to remove the `retain-until-date` set on the object version's metadata once the
 `retain-until-date` expires.
 DELETE object requests without a version id result in creation of delete markers
 on top of the object version, even if the object has a lock configuration set
@@ -197,7 +209,7 @@ will be available in s3utils to be used at a customer.
 
    A: Access Denied
 
-2. Q: Can an object set with GOVERNANCE retention mode be deleted with acccount
+2. Q: Can an object set with GOVERNANCE retention mode be deleted with account
    credentials?
 
    A: Yes, if the delete object request is sent is along with
