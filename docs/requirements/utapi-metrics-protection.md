@@ -15,7 +15,7 @@ UTAPI to their customers.
 
 In the meantime, service providers have used this behavior to implement their
 billing system. So, if we change the current behavior, we need to provide service
-providers another to bill their customers.
+providers another way to bill their customers.
 
 ## Requirements
 
