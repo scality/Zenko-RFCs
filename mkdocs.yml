@@ -18,6 +18,7 @@ extra_javascript:
 nav:
   - Requirements:
     - 'S3 Replication Monitoring': 'requirements/s3-replication-monitoring.md'
+    - 'S3 Lifecycle Expiration': 'requirements/s3-lifecycle-expiration.md'
   - Design:
     - 'General': 'design/index.md'
     - 'Bucket Notifications': 'design/bucket-notification.md'
