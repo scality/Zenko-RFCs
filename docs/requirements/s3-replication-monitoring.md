@@ -52,17 +52,17 @@ The S3 replication components are:
 
 - S3 replication components metrics must be exposed through HTTP endpoint
   following Prometheus standards
-  
+
 #### UI
-  
+
 - Third-party components dashboard must have an open-source monitoring dashboard
 - S3 monitoring graphs should not show S3 replication operations
 - S3 replication service must have a global monitoring dashboard containing:
-  - Current number of healthy vs unhealthy S3 replication components
-  - Number of objects replicated in the destinations over time
-  - Number of bytes replicated in the destinations over time
-  - Number of objects in the replication backlog over time
-  - Number of bytes in the replication backlog over time
+    - Current number of healthy vs unhealthy S3 replication components
+    - Number of objects replicated in the destinations over time
+    - Number of bytes replicated in the destinations over time
+    - Number of objects in the replication backlog over time
+    - Number of bytes in the replication backlog over time
 
 ![Mockup Global Monitoring Board](images/s3-replication-monitoring-global-monitoring-board.jpg)
 
@@ -128,16 +128,16 @@ The **Queue Processor** must expose the following metrics:
 - Number of messages consumed in the Kafka partitions since startup
 - Operations generated to retrieve (GET) objects from the source
   since startup:
-  - Number of operation
-  - Status
-  - Average latency
-  - Total bandwidth consumed
+    - Number of operation
+    - Status
+    - Average latency
+    - Total bandwidth consumed
 - Operations generated to write (PUT) object data and metadata in the destination
   since startup:
-  - Number of operation
-  - Status
-  - Average latency
-  - Total bandwidth consumed
+    - Number of operation
+    - Status
+    - Average latency
+    - Total bandwidth consumed
 
 Queue Processor metrics must be filterable by:
 
@@ -153,15 +153,15 @@ The **Queue Processor** must have the following monitoring graphs:
 - State
 - Partition lag
 - Operations generated to retrieve (GET) objects on the source
-  - Number of operation
-  - Operation status (success, retry, failed)
-  - Average latency
-  - Total bandwidth consumed
+    - Number of operation
+    - Operation status (success, retry, failed)
+    - Average latency
+    - Total bandwidth consumed
 - Operations generated to write (PUT) object data and metadata in the destination
-  - Number of operation
-  - Operation status (success, retry, failed)
-  - Average latency
-  - Total bandwidth consumed
+    - Number of operation
+    - Operation status (success, retry, failed)
+    - Average latency
+    - Total bandwidth consumed
 
 ![Mockup Queue Processor Board](images/s3-replication-monitoring-queue-processor-board.jpg)
 
@@ -174,11 +174,11 @@ The **Status Processor** must exposed the following metrics:
 - State (running, idle, initializing, or failed)
 - Kafka consumer offset in the Kafka partitions
 - Operations generated to update objects metadata in the source since startup
-  - Number of operation
-  - Status
-  - Average latency
-  - Total bandwidth consumed
-  
+    - Number of operation
+    - Status
+    - Average latency
+    - Total bandwidth consumed
+
 The Status Processor metrics must be filtrable by:
 
 - Kafka partition ID
@@ -193,9 +193,9 @@ The **Status Processor** must have the following monitoring graphs:
 - State
 - Partitions lag
 - Operations generated to update objects metadata in the source
-  - Number of operation
-  - Operation status (success, retry, failed)
-  - Average latency
-  - Total bandwidth consumed
+    - Number of operation
+    - Operation status (success, retry, failed)
+    - Average latency
+    - Total bandwidth consumed
 
 ![Mockup Status Processor Board](images/s3-replication-monitoring-status-processor-board.jpg)
