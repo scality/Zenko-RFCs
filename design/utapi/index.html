@@ -1,0 +1,986 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <link rel="canonical" href="https://scality.github.io/citadel/design/utapi/">
+      
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.2.2">
+    
+    
+      
+        <title>UTAPI - Object Squad Handbook</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.a2408e81.min.css">
+      
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.a46bcfb3.min.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#ff7043">
+      
+    
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="black" data-md-color-primary="deep-orange" data-md-color-accent="">
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#utapi-utilization-api" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="https://scality.github.io/citadel" title="Object Squad Handbook" class="md-header-nav__button md-logo" aria-label="Object Squad Handbook">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            Object Squad Handbook
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              UTAPI
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/scality/citadel/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+        
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://scality.github.io/citadel" title="Object Squad Handbook" class="md-nav__button md-logo" aria-label="Object Squad Handbook">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Object Squad Handbook
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/scality/citadel/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1" type="checkbox" id="nav-1">
+    
+    <label class="md-nav__link" for="nav-1">
+      Requirements
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Requirements" data-md-level="1">
+      <label class="md-nav__title" for="nav-1">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Requirements
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../requirements/s3-replication-monitoring/" title="S3 Replication Monitoring" class="md-nav__link">
+      S3 Replication Monitoring
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
+    
+    <label class="md-nav__link" for="nav-2">
+      Design
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Design" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Design
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../" title="General" class="md-nav__link">
+      General
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../bucket-notification/" title="Bucket Notifications" class="md-nav__link">
+      Bucket Notifications
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../object-lock/" title="Object Lock" class="md-nav__link">
+      Object Lock
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        UTAPI
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"/></svg>
+        </span>
+      </label>
+    
+    <a href="./" title="UTAPI" class="md-nav__link md-nav__link--active">
+      UTAPI
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#problem-description" class="md-nav__link">
+    Problem Description
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#technical-details" class="md-nav__link">
+    Technical Details
+  </a>
+  
+    <nav class="md-nav" aria-label="Technical Details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ingestion-flow" class="md-nav__link">
+    Ingestion Flow
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-model-and-operations" class="md-nav__link">
+    Data Model and Operations
+  </a>
+  
+    <nav class="md-nav" aria-label="Data Model and Operations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#redis" class="md-nav__link">
+    Redis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#warp-10" class="md-nav__link">
+    Warp 10
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#events" class="md-nav__link">
+    Events
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#checkpoints" class="md-nav__link">
+    Checkpoints
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#snapshots" class="md-nav__link">
+    Snapshots
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#repairs" class="md-nav__link">
+    Repairs
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#failure-recovery" class="md-nav__link">
+    Failure Recovery
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#migrations" class="md-nav__link">
+    Migrations
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../ballot-launcher/" title="Ballot Launcher" class="md-nav__link">
+      Ballot Launcher
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      Release
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Release" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Release
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../release/" title="General" class="md-nav__link">
+      General
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../release/disconnecting/" title="Disconnecting" class="md-nav__link">
+      Disconnecting
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#problem-description" class="md-nav__link">
+    Problem Description
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#technical-details" class="md-nav__link">
+    Technical Details
+  </a>
+  
+    <nav class="md-nav" aria-label="Technical Details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ingestion-flow" class="md-nav__link">
+    Ingestion Flow
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-model-and-operations" class="md-nav__link">
+    Data Model and Operations
+  </a>
+  
+    <nav class="md-nav" aria-label="Data Model and Operations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#redis" class="md-nav__link">
+    Redis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#warp-10" class="md-nav__link">
+    Warp 10
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#events" class="md-nav__link">
+    Events
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#checkpoints" class="md-nav__link">
+    Checkpoints
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#snapshots" class="md-nav__link">
+    Snapshots
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#repairs" class="md-nav__link">
+    Repairs
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#failure-recovery" class="md-nav__link">
+    Failure Recovery
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#migrations" class="md-nav__link">
+    Migrations
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/scality/citadel/edit/development/1.0/docs/design/utapi.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  
+                
+                
+                <h1 id="utapi-utilization-api">Utapi - Utilization API</h1>
+<h2 id="overview">Overview</h2>
+<p>Utapi tracks metrics of a service's usage. Metrics provided by Utapi include
+the number of incoming and outgoing bytes, the number of objects being stored,
+the storage utilized in bytes, and a count of operations performed on a
+service's resources. Operations supported by Utapi include APIs offered by
+Scality's S3 Server. Metrics can be retrieved for a given time range in a
+service's history.</p>
+<h2 id="problem-description">Problem Description</h2>
+<p>Utapi needs to provide a scalable solution to accurately track metrics across
+any number of nodes while providing reliable storage of its historic data. The
+system should be highly available to avoid losing data and affecting the
+quality of the provided metrics. It should be able to tolerate node and service
+failures and be able to repair it's data in the event of a failure.</p>
+<h2 id="technical-details">Technical Details</h2>
+<h4 id="ingestion-flow">Ingestion Flow</h4>
+<div class="highlight"><pre><span></span><code>                        +--------------------------------+
+                        |         Local Redis            |
+                        +--------------------------------+
+                              ^                  |
+                              |                  |
+                              |                  v
++-------------+         +------------+   +---------------+         +-------+
+| Cloudserver | +-----&gt; |Utapi Server|   |Background Task| +-----&gt; |Warp 10|
++-------------+         +------------+   +---------------+         +-------+
+</code></pre></div>
+
+<h3 id="data-model-and-operations"><strong>Data Model and Operations</strong></h3>
+<h4 id="redis">Redis</h4>
+<p>Utapi uses Redis to cache events before inserting them into Warp 10. This is to
+reduce write overhead as batch inserts are more efficient. Each event is JSON
+serialized and stored in a key. Based on its timestamp the event is then sharded
+into a 10 second block and its key is added to a corresponding Set.</p>
+<p><strong>Key Schema</strong></p>
+<p>Events are stored using <code>&lt;prefix&gt;:events:&lt;event uuid&gt;</code>
+Shards are stored using <code>&lt;prefix&gt;:shards:&lt;timestamp&gt;</code>
+<code>timestamp</code> is a UNIX style timestamp indicating the beginning of the shard</p>
+<h4 id="warp-10">Warp 10</h4>
+<p>Warp 10 is used for long term storage and analysis of events in Utapi. In Warp 10
+parlance each event is a <code>measure</code> consisting of a timestamp, <code>class</code>, key value
+pair <code>labels</code>, and an associated value.</p>
+<p>Utapi defines several classes:</p>
+<ul>
+<li><code>utapi.events</code> used for ingested events</li>
+<li><code>utapi.checkpoints</code> used for incremental checkpoints of events</li>
+<li><code>utapi.checkpoints.master</code> used to record checkpoint creation</li>
+<li><code>utapi.snapshots</code> used for incremental snapshots of checkpoints</li>
+<li><code>utapi.snapshots.master</code> used to record snapshot creation</li>
+<li><code>utapi.repairs</code> </li>
+<li><code>utapi.repairs.master</code> </li>
+</ul>
+<p><strong>High level overview</strong></p>
+<div class="highlight"><pre><span></span><code>   Snapshots         Checkpoints            Events
+
+ +-----------+      +-----------+      +-------------+
+
+                                         +---------+
+                                         |   -1    |
+                                         +---------+
+                                         +---------+
+                                         |   -1    |
+                                         +---------+
+                      +-------+ &lt;------+ +---------+
+                      |  -3   |    |     |   -1    |
+                      +-------+    |     +---------+
+                                   +---+ +---------+
+                                   |     |   -1    |
+                                   |     +---------+
+                                   +---+ +---------+
+                                         |   -1    |
+                                         +---------+
+   +-------+ &lt;------+ +-------+ &lt;------+ +---------+
+   |   5   |    |     |  -1   |    |     |   -1    |
+   +-------+    |     +-------+    |     +---------+
+                |                  +---+ +---------+
+                |                  |     |   -1    |
+                |                  |     +---------+
+                |                  +---+ +---------+
+                |                        |   +1    |
+                |                        +---------+
+                +---+ +-------+ &lt;------+ +---------+
+                |     |  +3   |    |     |   +1    |
+                |     +-------+    |     +---------+
+                |                  +---+ +---------+
+                |                  |     |   +1    |
+                |                  |     +---------+
+                |                  +---+ +---------+
+                |                        |   +1    |
+                |                        +---------+
+                +---+ +-------+ &lt;------+ +---------+
+                      |  +3   |    |     |   +1    |
+                      +-------+    |     +---------+
+                                   +---+ +---------+
+                                   |     |   +1    |
+                                   |     +---------+
+                                   +---+ +---------+
+                                         |   +1    |
+                                         +---------+
+</code></pre></div>
+
+<h4 id="events">Events</h4>
+<p>Utapi stores four integers, using Warp 10's multivariate data type, for every
+operation it ingests, <code>objectDelta</code>, <code>bytesDelta</code>, <code>ingress</code>, and <code>egress</code>.
+They reflect how an operation affects the computed metric counters and can be
+both positive and negative.</p>
+<p>For example, an upload of a 100 byte object to a new key would have the values:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+  <span class="nt">&quot;objectDelta&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="nt">&quot;bytesDelta&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+  <span class="nt">&quot;ingress&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+  <span class="nt">&quot;egress&quot;</span><span class="p">:</span> <span class="mi">0</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Deleting the same object would have</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+  <span class="nt">&quot;objectDelta&quot;</span><span class="p">:</span> <span class="mi">-1</span><span class="p">,</span>
+  <span class="nt">&quot;bytesDelta&quot;</span><span class="p">:</span> <span class="mi">-100</span><span class="p">,</span>
+  <span class="nt">&quot;ingress&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="nt">&quot;egress&quot;</span><span class="p">:</span> <span class="mi">0</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Each event can also have attached metadata such as the <code>account</code> , <code>bucket</code>,
+or <code>location</code> of the affected resource. These are attached as Warp 10 <code>labels</code>
+to the event and are used during checkpoint creation to create the various
+levels of metrics.</p>
+<h4 id="checkpoints">Checkpoints</h4>
+<p>Checkpoints are the first step in converting the stream of <code>events</code> into a form
+we can use to compute metrics. They are created using a timestamp and a list of
+<code>label</code> names to index. Each provided <code>label</code> creates a "level" of metrics and
+a checkpoint will be created for each unique <code>label</code> name/value pair
+encountered.  Starting at the end timestamp a previously created master
+checkpoint is search for, its timestamp will be used for the start of the
+checkpointed range. If no previous master checkpoint is found a timestamp of
+<code>0</code> is used, causing all events to be scanned. Events during the calculated
+time range are retrieved and iterated over. If any of the specified <code>labels</code>
+are seen the event's values are taken and summed with any previous values
+matching the same <code>label</code> value. A count of each value of the label
+<code>operationId</code> is also kept for every checkpoint.</p>
+<p>For example, the following <code>events</code> (shown in <code>GTS</code> format for brevity) if
+used with the label <code>bucket</code> will produce two checkpoints tagged with <code>bucket0</code>
+and <code>bucket1</code> respectively.</p>
+<div class="highlight"><pre><span></span><code>1000000000000000 utapi.events{operatioinId=putObject bucket=bucket0 key=obj0} [ 1 100 100 0 ]
+1000000000000001 utapi.events{operatioinId=putObject bucket=bucket0 key=obj1} [ 1 100 100 0 ]
+1000000000000002 utapi.events{operatioinId=putObject bucket=bucket1 key=obj0} [ 1 100 100 0 ]
+1000000000000003 utapi.events{operatioinId=putObject bucket=bucket1 key=obj2} [ 1 100 100 0 ]
+1000000000000003 utapi.events{operatioinId=deleteObject bucket=bucket1 key=obj2} [ -1 -100 0 0 ]
+</code></pre></div>
+
+<div class="highlight"><pre><span></span><code>1000000000000010 utapi.checkpoints{bucket=bucket0} [ 2 200 200 0 { &quot;ops&quot;: { &quot;putObject&quot;: 2 } } ]
+1000000000000010 utapi.checkpoints{bucket=bucket1} [ 1 100 200 0 { &quot;ops&quot;: { &quot;putObject&quot;: 2, &quot;deleteObject&quot;: 1 } } ]
+</code></pre></div>
+
+<p>After the <code>events</code> are scanned each checkpoint is stored as a measure in Warp 10
+using the class <code>utapi.checkpoints</code>. A single label is attached with the label
+name and value being the level and group of the checkpoint (ie <code>bucket</code> and
+<code>bucket0</code>) from the example above. This allows us to easily query for a
+specific level's checkpoints. Once all checkpoints have been stored a "master"
+checkpoint is created with the class <code>utapi.checkpoints.master</code> The passed end
+timestamp is used for the master checkpoint along with any created checkpoints
+to signify the end of the scanned range.</p>
+<h4 id="snapshots">Snapshots</h4>
+<p>Snapshots are used to convert the delta style checkpoints into concrete numbers
+and provide a starting point for calculating the final metrics rather than
+processing every checkpoint. Snapshots are created using only an end timestamp
+signifying the end of the time range of included checkpoints. Like checkpoint
+creation the latest master snapshot is searched for and all checkpoints with
+timestamp lying within the master snapshots timestamp and the passed timestamp
+are fetched. If no previous master snapshots are found a timestamp of <code>0</code> is
+used causing all checkpoints to be included. The checkpoints are then iterated
+over and summed together based upon their labels using the values from the
+previous snapshot as a base. </p>
+<p>For example the two checkpoints from the previous example:</p>
+<div class="highlight"><pre><span></span><code>1000000000000010 utapi.checkpoints{bucket=bucket0} [ 2 200 200 0 { &quot;ops&quot;: { &quot;putObject&quot;: 2 } } ]
+1000000000000010 utapi.checkpoints{bucket=bucket1} [ 1 100 200 0 { &quot;ops&quot;: { &quot;putObject&quot;: 2, &quot;deleteObject&quot;: 1 } } ]
+</code></pre></div>
+
+<p>Will produce these two snapshots:</p>
+<div class="highlight"><pre><span></span><code>1000000000000010 utapi.snapshots{bucket=bucket0} [ 2 200 200 0 { &quot;ops&quot;: { &quot;putObject&quot;: 2 } } ]
+1000000000000010 utapi.snapshots{bucket=bucket1} [ 1 100 200 0 { &quot;ops&quot;: { &quot;putObject&quot;: 2, &quot;deleteObject&quot;: 1 } } ]
+</code></pre></div>
+
+<h4 id="repairs">Repairs</h4>
+<p>In a distributed system node or network failures can cause events to not be
+immediately ingested into Utapi and can cause problems for a system rely on a
+static ordering of historic events. To guard against this Utapi implements a
+system for asynchronous repairs of checkpoints and snapshots. During the
+Redis -&gt; Warp 10 transition Utapi performs some sanity checks to determine if
+the inserted metrics could have already included in a checkpoint. If so the
+repair process is started using the beginning and end of the time range of the
+inserted events as the beginning and end of the repair range. Effected
+checkpoints are fetched and recalculated to include the new events. Snapshots
+including the updated checkpoints are then fetched and recalculated. </p>
+<div class="highlight"><pre><span></span><code>   +-------+ &lt;--+---+ +-------+ &lt;--+---+ +---------+
+   |   3   |    |     |  -1   |    |     |   -1    |
+   +-------+    |     +-------+    |     +---------+
+       ^        |                  +---+ +---------+
+       |        |                  |     |   -1    |
+    Snapshot    |                  |     +---------+
+    updated     |                  +---+ +---------+
+                |                        |   +1    |
+                |                        +---------+
+                +---+ +-------+ &lt;--+---+ +---------+
+                |     |  +1   |    |     |   +1    |
+Checkpoint +--------&gt; +-------+    |     +---------+
+is updated      |                  +---+ +---------+
+                |                  |     |   +1    |
+                |                  |     +---------+
+                |                  |---+ +---------+
+                |                  |     |   -1    | &lt;----+ New events are inserted
+                |                  |     +---------+      |
+                |                  |---+ +---------+      |
+                |                  |     |   -1    | &lt;----+
+                |                  |     +---------+
+                |                  +---+ +---------+
+                |                        |   +1    |
+                |                        +---------+
+                +---+ +-------+ &lt;--+---+ +---------+
+                      |  +3   |    |     |   +1    |
+                      +-------+    |     +---------+
+                                   +---+ +---------+
+                                   |     |   +1    |
+                                   |     +---------+
+                                   +---+ +---------+
+                                         |   +1    |
+                                         +---------+
+</code></pre></div>
+
+<h3 id="failure-recovery"><strong>Failure Recovery</strong></h3>
+<p>Failure scenarios are mitigated using caching with retries at various levels of
+the system with specially formatted logs messages being used as a last resort.
+Below are some specific failure scenarios that have been considered.</p>
+<p><strong>Local Redis Unavailable</strong></p>
+<p>In the case of the local redis being unavailable Cloudserver will cache events
+in memory up to a limit and then will begin flushing events as special log
+messages. After redis is available, events will be flushed and a repair
+triggered if needed.</p>
+<p><strong>Warp 10 Unavailable</strong></p>
+<p>If Warp 10 is unavailable events are persisted in redis until it
+becomes available and then batch inserted.</p>
+<h3 id="migrations">Migrations</h3>
+<p>Migrations from previous customer deployments will require a post upgrade
+tool to be used. This will migrate the historic utapi data in Redis into
+Warp 10 and make it available under the new system..</p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../object-lock/" title="Object Lock" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Object Lock
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../ballot-launcher/" title="Ballot Launcher" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Ballot Launcher
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/vendor.d710d30a.min.js"></script>
+      <script src="../../assets/javascripts/bundle.5f27aba8.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../..",
+          features: [],
+          search: Object.assign({
+            worker: "../../assets/javascripts/worker/search.27c6a5e6.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="https://unpkg.com/mermaid@8.5.1/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

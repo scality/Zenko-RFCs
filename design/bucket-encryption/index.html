@@ -1,0 +1,996 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <link rel="canonical" href="https://scality.github.io/citadel/design/bucket-encryption/">
+      
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.2.2">
+    
+    
+      
+        <title>Bucket Encryption - Object Squad Handbook</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.a2408e81.min.css">
+      
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.a46bcfb3.min.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#ff7043">
+      
+    
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="black" data-md-color-primary="deep-orange" data-md-color-accent="">
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#bucket-encryption" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="https://scality.github.io/citadel" title="Object Squad Handbook" class="md-header-nav__button md-logo" aria-label="Object Squad Handbook">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            Object Squad Handbook
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              Bucket Encryption
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/scality/citadel/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+        
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://scality.github.io/citadel" title="Object Squad Handbook" class="md-nav__button md-logo" aria-label="Object Squad Handbook">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Object Squad Handbook
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/scality/citadel/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1" type="checkbox" id="nav-1">
+    
+    <label class="md-nav__link" for="nav-1">
+      Requirements
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Requirements" data-md-level="1">
+      <label class="md-nav__title" for="nav-1">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Requirements
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../requirements/s3-replication-monitoring/" title="S3 Replication Monitoring" class="md-nav__link">
+      S3 Replication Monitoring
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+    
+    <label class="md-nav__link" for="nav-2">
+      Design
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Design" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Design
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../" title="General" class="md-nav__link">
+      General
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../bucket-notification/" title="Bucket Notifications" class="md-nav__link">
+      Bucket Notifications
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../object-lock/" title="Object Lock" class="md-nav__link">
+      Object Lock
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../utapi/" title="UTAPI" class="md-nav__link">
+      UTAPI
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../ballot-launcher/" title="Ballot Launcher" class="md-nav__link">
+      Ballot Launcher
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      Release
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Release" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Release
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../release/" title="General" class="md-nav__link">
+      General
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../release/disconnecting/" title="Disconnecting" class="md-nav__link">
+      Disconnecting
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#old-support-for-bucket-level-encryption" class="md-nav__link">
+    Old support for bucket-level encryption
+  </a>
+  
+    <nav class="md-nav" aria-label="Old support for bucket-level encryption">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create_encrypted_bucketjs" class="md-nav__link">
+    create_encrypted_bucket.js
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bucket-encryption-api" class="md-nav__link">
+    Bucket Encryption API
+  </a>
+  
+    <nav class="md-nav" aria-label="Bucket Encryption API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#putbucketencryption" class="md-nav__link">
+    PutBucketEncryption
+  </a>
+  
+    <nav class="md-nav" aria-label="PutBucketEncryption">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#implementation-of-putbucketencryption-regarding-bucket-metadata" class="md-nav__link">
+    Implementation of PutBucketEncryption Regarding Bucket Metadata
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getbucketencryption" class="md-nav__link">
+    GetBucketEncryption
+  </a>
+  
+    <nav class="md-nav" aria-label="GetBucketEncryption">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#implementation-of-getbucketencryption-regarding-bucket-metadata" class="md-nav__link">
+    Implementation of GetBucketEncryption Regarding Bucket Metadata
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deletebucketencryption" class="md-nav__link">
+    DeleteBucketEncryption
+  </a>
+  
+    <nav class="md-nav" aria-label="DeleteBucketEncryption">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#implementation-of-deletebucketencryption-regarding-bucket-metadata" class="md-nav__link">
+    Implementation of DeleteBucketEncryption Regarding Bucket Metadata
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#application-logic-for-object-encryption" class="md-nav__link">
+    Application Logic for Object Encryption
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#internal-metadata" class="md-nav__link">
+    Internal Metadata
+  </a>
+  
+    <nav class="md-nav" aria-label="Internal Metadata">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#internal-bucket-metadata" class="md-nav__link">
+    Internal Bucket Metadata
+  </a>
+  
+    <nav class="md-nav" aria-label="Internal Bucket Metadata">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#managed-kms-master-key-without-a-default-configuration" class="md-nav__link">
+    Managed KMS Master Key Without a Default Configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#default-encryption-configuration-with-aes256-algorithm" class="md-nav__link">
+    Default Encryption Configuration With "AES256" Algorithm
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#default-encryption-configuration-with-awskms-algorithm" class="md-nav__link">
+    Default Encryption Configuration With "aws:kms" Algorithm
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#legacy-bucket-encryption-configuration-create_encrypted_bucketjs" class="md-nav__link">
+    Legacy Bucket Encryption Configuration (create_encrypted_bucket.js)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#internal-object-metadata" class="md-nav__link">
+    Internal Object Metadata
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bucket-policies" class="md-nav__link">
+    Bucket Policies
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/scality/citadel/edit/development/1.0/docs/design/bucket-encryption.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  
+                
+                
+                <h1 id="bucket-encryption">Bucket Encryption</h1>
+<h2 id="old-support-for-bucket-level-encryption">Old support for bucket-level encryption</h2>
+<h3 id="create_encrypted_bucketjs">create_encrypted_bucket.js</h3>
+<p>The previous way of encrypting objects in buckets is by using a script
+to create the bucket like:</p>
+<div class="highlight"><pre><span></span><code>docker exec scality-s3 node bin/create_encrypted_bucket.js -h 10.10.61.61 -p 8000 -a XIJG9OTSMLDDIEWX21HT -k BTNMVTDBujqpTUEVYVYtfhxExCWy3KvDlad4hmwC -b my-encrypted-bucket
+</code></pre></div>
+
+<p>The script is creating a bucket through the REST API, passing an extra
+proprietary header "x-amz-scal-server-side-encryption: AES256" to
+enable encryption using a newly created bucket master key stored in
+the KMS server, and referenced from the bucket metadata.</p>
+<p>It's also possible with the existing REST API to specify an existing
+master key ID to use by providing the extra
+"x-amz-scal-server-side-encryption-aws-kms-key-id" header, although
+the create_encrypted_bucket.js script does not provide this option.</p>
+<p>We plan to keep the compatibility with those headers for now but the
+compatibility will be removed eventually in favor of the bucket
+encryption API.</p>
+<h2 id="bucket-encryption-api">Bucket Encryption API</h2>
+<p>We now support bucket encryption using the standard S3 APIs, to enable
+or disable encryption on existing buckets:</p>
+<ul>
+<li>
+<p><a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketEncryption.html">PutBucketEncryption</a></p>
+</li>
+<li>
+<p><a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketEncryption.html">GetBucketEncryption</a></p>
+</li>
+<li>
+<p><a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketEncryption.html">DeleteBucketEncryption</a></p>
+</li>
+</ul>
+<h3 id="putbucketencryption">PutBucketEncryption</h3>
+<p>We support the following rule to enable encryption automatically on
+all objects in the bucket:</p>
+<div class="highlight"><pre><span></span><code>&lt;ServerSideEncryptionConfiguration xmlns=&quot;http://s3.amazonaws.com/doc/2006-03-01/&quot;&gt;
+   &lt;Rule&gt;
+      &lt;ApplyServerSideEncryptionByDefault&gt;
+         &lt;SSEAlgorithm&gt;AES256&lt;/SSEAlgorithm&gt;
+      &lt;/ApplyServerSideEncryptionByDefault&gt;
+   &lt;/Rule&gt;
+   ...
+&lt;/ServerSideEncryptionConfiguration&gt;
+</code></pre></div>
+
+<p>Alternatively, we also allow specifying a master key ID to use for the
+bucket that will be sent when contacting the KMS via the
+KMSMasterKeyID tag, instead of letting S3C generate one automatically:</p>
+<div class="highlight"><pre><span></span><code>&lt;ServerSideEncryptionConfiguration xmlns=&quot;http://s3.amazonaws.com/doc/2006-03-01/&quot;&gt;
+   &lt;Rule&gt;
+      &lt;ApplyServerSideEncryptionByDefault&gt;
+         &lt;SSEAlgorithm&gt;aws:kms&lt;/SSEAlgorithm&gt;
+         &lt;KMSMasterKeyID&gt;abcdef&lt;/KMSMasterKeyID&gt;
+      &lt;/ApplyServerSideEncryptionByDefault&gt;
+   &lt;/Rule&gt;
+   ...
+&lt;/ServerSideEncryptionConfiguration&gt;
+</code></pre></div>
+
+<p><strong>Note</strong>: only one <code>&lt;Rule&gt;</code> entry is allowed in the server-side
+encryption configuration.</p>
+<p><strong>Note</strong>: the <code>&lt;BucketKeyEnabled&gt;</code> rule option is not supported.</p>
+<h4 id="implementation-of-putbucketencryption-regarding-bucket-metadata">Implementation of PutBucketEncryption Regarding Bucket Metadata</h4>
+<ul>
+<li>
+<p>If the <code>serverSideEncryption</code> does not exist, we create it and fill
+  with the relevant attributes (see <a href="#internal-bucket-metadata">Internal Bucket
+  Metadata</a>)</p>
+</li>
+<li>
+<p>If the <code>serverSideEncryption</code> exists, we set its <code>mandatory</code>
+  attribute to <code>true</code>, and possibly set the <code>algorithm</code> to the new
+  configured algorithm, and if it is <code>aws:kms</code>, the <strong>KMSMasterKeyId</strong>
+  also gets stored in the <code>configuredMasterKeyId</code> attribute. We do not
+  change the other attributes, notably the <code>masterKeyId</code> is not
+  replaced by a new one.</p>
+</li>
+</ul>
+<h3 id="getbucketencryption">GetBucketEncryption</h3>
+<p>Returns the bucket encryption configuration, as specified by a
+previous PutBucketEncryption.</p>
+<p><strong>Note</strong>: due to the bucket metadata format preservation, it should
+  also be returning an existing bucket-level encryption configuration
+  for buckets created with the legacy
+  <code>x-amz-scal-server-side-encryption</code> header, that did not get an
+  explicit configuration applied via PutBucketEncryption.</p>
+<h4 id="implementation-of-getbucketencryption-regarding-bucket-metadata">Implementation of GetBucketEncryption Regarding Bucket Metadata</h4>
+<p>See <a href="#internal-bucket-metadata">Internal Bucket Metadata</a></p>
+<p>The implementation reads the fields stored in the
+<code>serverSideEncryption</code> bucket metadata attribute, and returns the
+formatted XML response filled with the needed information.</p>
+<ul>
+<li>If there is no <code>serverSideEncryption</code> attribute, or if the
+  <code>serverSideEncryption</code> attribute does not contain the
+  <code>mandatory: true</code> field, return
+  <code>ServerSideEncryptionConfigurationNotFoundError</code>.</li>
+</ul>
+<h3 id="deletebucketencryption">DeleteBucketEncryption</h3>
+<p>Deletes the existing bucket encryption configuration, removing any
+default bucket encryption policy for the bucket hence storing new
+objects unencrypted unless the requests provide the header
+<code>x-amz-server-side-encryption</code>.</p>
+<p>Internally, some of the bucket encryption metadata will be kept but
+the <code>mandatory</code> flag is removed (see <a href="#internal-metadata">Internal
+Metadata</a> section).</p>
+<h4 id="implementation-of-deletebucketencryption-regarding-bucket-metadata">Implementation of DeleteBucketEncryption Regarding Bucket Metadata</h4>
+<p>See <a href="#internal-bucket-metadata">Internal Bucket Metadata</a></p>
+<p>When the bucket encryption configuration is deleted, we don't entirely
+delete the <code>serverSideEncryption</code> section, because we want to keep the
+existing parameters, notably the <code>masterKeyId</code>. Instead, we drop the
+<code>mandatory</code> field and <code>configuredMasterKeyId</code> (if set), and keep the
+other fields.</p>
+<p>Deleting a bucket encryption configuration that does not exist
+(i.e. no <code>serverSideEncryption</code> section or its <code>mandatory</code> field is
+unset) returns a silent success to the client.</p>
+<h2 id="application-logic-for-object-encryption">Application Logic for Object Encryption</h2>
+<p>The following steps determine when and how to apply encryption to a
+particular object PUT request:</p>
+<ul>
+<li>
+<p>Does the request contain the <code>x-amz-server-side-encryption</code> header?</p>
+</li>
+<li>
+<p><strong>yes</strong>: encrypt object with the algorithm value of
+    <code>x-amz-server-side-encryption</code> and master key ID
+    <code>x-amz-server-side-encryption-aws-kms-key-id</code> if it is set and the
+    algorithm value is <code>aws:kms</code>, or the bucket managed key under
+    <code>serverSideEncryption.masterKeyId</code> otherwise</p>
+</li>
+<li>
+<p><strong>no</strong>: continue</p>
+</li>
+<li>
+<p>Does the bucket have a default encryption configuration? (i.e the
+  bucket metadata field <code>serverSideEncryption.mandatory</code> is
+  <code>true</code>)</p>
+</li>
+<li>
+<p><strong>yes</strong>: encrypt object with the algorithm value of
+    <code>serverSideEncryption.algorithm</code> and either the
+    <code>serverSideEncryption.configuredMasterKeyId</code> if it is set, or
+    the master key ID <code>serverSideEncryption.masterKeyId</code> otherwise</p>
+</li>
+<li>
+<p><strong>no</strong>: do not encrypt the object</p>
+</li>
+</ul>
+<p>The following steps give the procedure when an object is to be
+encrypted:</p>
+<ul>
+<li>
+<p>if the algorithm value is <strong>AES256</strong>:</p>
+</li>
+<li>
+<p>create server-side bucket encryption parameters if they do not
+    exist yet in the <code>serverSideEncryption</code> bucket metadata field:</p>
+<ul>
+<li>set the <code>algorithm</code> attribute to <code>AES256</code> and the
+<code>masterKeyId</code> to a new master key ID for that bucket, as well as
+<code>cryptoScheme</code> with value <code>1</code>. Do <strong>not</strong> set the
+<code>mandatory</code> field, as this configuration shall not apply
+automatically to new objects.</li>
+</ul>
+</li>
+<li>
+<p>encrypt the object with a new data key, itself encrypted with the
+    bucket master key</p>
+</li>
+<li>
+<p>store the encrypted data key and master key ID (the same as the
+    bucket master key ID) in the object metadata</p>
+</li>
+<li>
+<p>if the algorithm value is <strong>aws:kms</strong> and a master key ID is provided:</p>
+</li>
+<li>
+<p>encrypt the object with a new data key, itself encrypted with the
+    user-specified master key</p>
+</li>
+<li>
+<p>store the encrypted data key and user-specified master key ID in
+    the object metadata. Do not create or alter the bucket server-side
+    encryption parameters.</p>
+</li>
+<li>
+<p>if the algorithm value is <strong>aws:kms</strong> but no master key ID is
+  provided, follow the <strong>AES256</strong> logic above.</p>
+</li>
+</ul>
+<h2 id="internal-metadata">Internal Metadata</h2>
+<p>The internal metadata format should not change with the introduction
+of encryption API support.</p>
+<h3 id="internal-bucket-metadata">Internal Bucket Metadata</h3>
+<p>The internal bucket metadata related to encryption is stored under the
+<code>serverSideEncryption</code> attribute. It may be of three slightly
+different formats, described below.</p>
+<p><strong>Note</strong>: The <code>serverSideEncryption</code> field used to be created
+automatically when the <code>x-amz-scal-server-side-encryption</code> was
+provided at bucket creation time. It is now created dynamically,
+either when a default bucket encryption configuration is applied to
+the bucket or when the first object requesting encryption (through the
+<code>x-amz-server-side-encryption</code> header) is stored in the bucket.</p>
+<h4 id="managed-kms-master-key-without-a-default-configuration">Managed KMS Master Key Without a Default Configuration</h4>
+<p>When a bucket has a managed encryption key associated to it, but no
+default encryption applied to new objects automatically, its metadata
+<code>serverSideEncryption</code> looks like this:</p>
+<div class="highlight"><pre><span></span><code>serverSideEncryption: {
+    cryptoScheme: 1,
+    algorithm: &quot;AES256&quot;,
+    masterKeyId: &quot;48c5b43c9ba57f052deac9c081b2f1a6954dd2886e82f71679bc640a4a0e731b&quot;
+}
+</code></pre></div>
+
+<ul>
+<li>
+<p><strong>cryptoScheme</strong> is used to version the encryption method and
+  parameters used internally, like the "salt" value.</p>
+</li>
+<li>
+<p><strong>algorithm</strong> should be "AES256" (the only supported algorithm).</p>
+</li>
+<li>
+<p><strong>masterKeyId</strong> is the bucket's managed master encryption key ID. It
+  is normally the identifier of the encryption key stored by the KMS
+  server to encrypt/decrypt the individual object encryption keys for
+  the bucket, when the user does not provide its own KMS key ID to use
+  in the "aws:kms" encryption mode (and when the default bucket
+  encryption does not contain an explicit one). It may also be the
+  hex-encoded master encryption key itself if there is no KMS server,
+  such as in this example (for testing purpose).</p>
+</li>
+</ul>
+<p><strong>Note</strong>: On AWS, the master key ID is an ARN of the form
+  "arn:aws:kms:region:account:key/uuid". S3C does not follow this
+  convention, in this example it is a "file" backend key (only used
+  for testing), and key IDs look different with a real KMS server.</p>
+<h4 id="default-encryption-configuration-with-aes256-algorithm">Default Encryption Configuration With "AES256" Algorithm</h4>
+<p>A bucket may store a default encryption configuration, set via the
+PutBucketEncryption API. When this happens, the bucket metadata
+<code>serverSideEncryption</code> is created or updated with the following fields:</p>
+<div class="highlight"><pre><span></span><code>serverSideEncryption: {
+    cryptoScheme: 1,
+    algorithm: &quot;AES256&quot;,
+    masterKeyId: &quot;48c5b43c9ba57f052deac9c081b2f1a6954dd2886e82f71679bc640a4a0e731b&quot;,
+    mandatory: true
+}
+</code></pre></div>
+
+<p>Here, we set the <code>mandatory: true</code> field to know that the
+configuration shall be applied by default on all new objects.</p>
+<p>The <code>serverSideEncryption</code> metadata attribute is created if it does
+not exist yet and a new master key is created via the KMS server, or
+if the bucket already has the <code>serverSideEncryption</code> attribute, it is
+updated by setting the <code>mandatory: true</code> field to enforce a default
+encryption on new objects, and keeping the other fields as-is, in
+particular the <code>masterKeyId</code> is not changed (we do not plan to support
+other encryption schemes than <strong>AES256</strong> for now so the rest of the
+fields can be left alone).</p>
+<h4 id="default-encryption-configuration-with-awskms-algorithm">Default Encryption Configuration With "aws:kms" Algorithm</h4>
+<p>In case the default encryption configuration is of type "aws:kms", the
+master key ID has been specified explicitly in the "KMSMasterKeyId"
+tag during PutBucketEncryption, and it is also stored in this section
+under the <code>configuredMasterKeyId</code> field, and will take precedence over
+the <code>masterKeyId</code> when applying the default encryption parameters to
+objects:</p>
+<div class="highlight"><pre><span></span><code>serverSideEncryption: {
+    cryptoScheme: 1,
+    algorithm: &quot;aws:kms&quot;,
+    masterKeyId: &quot;48c5b43c9ba57f052deac9c081b2f1a6954dd2886e82f71679bc640a4a0e731b&quot;,
+    mandatory: true,
+    configuredMasterKeyId: &quot;f04e1f176cfc3dd1f104921dc9e1aff82cb15c3c534ee973ff5653e32c7c439d&quot;
+}
+</code></pre></div>
+
+<p><strong>Note</strong>: this default configured master key ID to use is stored
+separately from the bucket managed master key ID in the
+<code>serverSideEncryption</code> section, because it can be set or removed
+dynamically by the bucket encryption configuration API and should not
+alter the existing (permanent) bucket encryption managed key that is
+used to encrypt objects without an explicit KMS key ID.</p>
+<h3 id="legacy-bucket-encryption-configuration-create_encrypted_bucketjs">Legacy Bucket Encryption Configuration (create_encrypted_bucket.js)</h3>
+<p>For buckets that were created encrypted in previous releases using the
+<code>create_encrypted_bucket.js</code> script, the metadata format is the same
+as in the section <a href="#default-encryption-configuration-with-aes256-algorithm">Default Encryption Configuration With "AES256"
+Algorithm</a>.</p>
+<p>This way, we can treat it in the same way, simplifying the logic and
+allowing to return the existing encryption configuration via
+GetBucketEncryption.</p>
+<p>For reference, the existing metadata for legacy encryption
+configuration looks like this:</p>
+<div class="highlight"><pre><span></span><code>serverSideEncryption: {
+    cryptoScheme: 1,
+    algorithm: &quot;AES256&quot;,
+    masterKeyId: &quot;48c5b43c9ba57f052deac9c081b2f1a6954dd2886e82f71679bc640a4a0e731b&quot;,
+    mandatory: true
+}
+</code></pre></div>
+
+<h3 id="internal-object-metadata">Internal Object Metadata</h3>
+<p>Each encrypted object contains in its metadata a set of attributes resembling the following:</p>
+<div class="highlight"><pre><span></span><code>&quot;x-amz-server-side-encryption&quot;: &quot;AES256&quot;|&quot;aws:kms&quot;,
+&quot;x-amz-server-side-encryption-aws-kms-key-id&quot;: &quot;48c5b43c9ba57f052deac9c081b2f1a6954dd2886e82f71679bc640a4a0e731b&quot;,
+&quot;x-amz-server-side-encryption-customer-algorithm&quot;: &quot;&quot;,
+</code></pre></div>
+
+<ul>
+<li>
+<p><strong>x-amz-server-side-encryption</strong> is set to the encryption algorithm,
+    "AES256", or "aws:kms" if there is a custom KMS key ID that should
+    be returned when fetching object metadata (HEAD object request)</p>
+</li>
+<li>
+<p><strong>x-amz-server-side-encryption-aws-kms-key-id</strong> is the identifier of
+    the KMS master key used to encrypt/decrypt the object data encryption
+    key, set in all encryption modes.</p>
+</li>
+<li>
+<p><strong>x-amz-server-side-encryption-customer-algorithm</strong>: always set to
+    the empty string, relates to customer-provided keys mode (SSE-C)
+    which is not supported at the moment.</p>
+</li>
+</ul>
+<p>Each data location object also contains the following attributes:</p>
+<div class="highlight"><pre><span></span><code>&quot;location&quot;: [
+    {
+        // other location attributes: &quot;key&quot; etc.
+        &quot;cryptoScheme&quot;: 1,
+        &quot;cipheredDataKey&quot;: &quot;d88SLogLTw8nzRyO0Tf0qynQPLubT0N9mBDAxEZ5ww0=&quot;
+    }
+]
+</code></pre></div>
+
+<ul>
+<li>
+<p><strong>cryptoScheme</strong> is used to version the encryption method and
+  parameters used internally, like the "salt" value.</p>
+</li>
+<li>
+<p><strong>cipheredDataKey</strong> is the object data encryption key, itself stored
+  encrypted with the master key</p>
+</li>
+</ul>
+<h2 id="bucket-policies">Bucket Policies</h2>
+<p>We currently do not plan to support bucket policies related to
+encryption, namely, specifying conditions attached to the
+<code>s3:x-amz-server-side-encryption</code> attribute in bucket policies.</p>
+<p>The main reason to implement those would be to prevent users from
+using a different encryption scheme than what is set by default in the
+bucket encryption configuration.</p>
+<p>When a bucket has a default encryption configuration attached, it is
+not possible to send unencrypted objects anymore to the bucket,
+because:</p>
+<ul>
+<li>
+<p>the absence of the <code>x-amz-server-side-encryption</code> header in a PUT
+  object request automatically applies the default encryption to the
+  object</p>
+</li>
+<li>
+<p>if present, the <code>x-amz-server-side-encryption</code> header must contain a
+  valid encryption mode, there is no "unencrypted" mode available.</p>
+</li>
+</ul>
+<p>For this reason, we don't support those bucket policies today.</p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/vendor.d710d30a.min.js"></script>
+      <script src="../../assets/javascripts/bundle.5f27aba8.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../..",
+          features: [],
+          search: Object.assign({
+            worker: "../../assets/javascripts/worker/search.27c6a5e6.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="https://unpkg.com/mermaid@8.5.1/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

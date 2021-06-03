@@ -1,0 +1,1173 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <link rel="canonical" href="https://scality.github.io/citadel/design/bucket-notification/">
+      
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.2.2">
+    
+    
+      
+        <title>Bucket Notifications - Object Squad Handbook</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.a2408e81.min.css">
+      
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.a46bcfb3.min.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#ff7043">
+      
+    
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="black" data-md-color-primary="deep-orange" data-md-color-accent="">
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#bucket-notification" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="https://scality.github.io/citadel" title="Object Squad Handbook" class="md-header-nav__button md-logo" aria-label="Object Squad Handbook">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            Object Squad Handbook
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              Bucket Notifications
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/scality/citadel/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+        
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://scality.github.io/citadel" title="Object Squad Handbook" class="md-nav__button md-logo" aria-label="Object Squad Handbook">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Object Squad Handbook
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/scality/citadel/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1" type="checkbox" id="nav-1">
+    
+    <label class="md-nav__link" for="nav-1">
+      Requirements
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Requirements" data-md-level="1">
+      <label class="md-nav__title" for="nav-1">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Requirements
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../requirements/s3-replication-monitoring/" title="S3 Replication Monitoring" class="md-nav__link">
+      S3 Replication Monitoring
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
+    
+    <label class="md-nav__link" for="nav-2">
+      Design
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Design" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Design
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../" title="General" class="md-nav__link">
+      General
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Bucket Notifications
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"/></svg>
+        </span>
+      </label>
+    
+    <a href="./" title="Bucket Notifications" class="md-nav__link md-nav__link--active">
+      Bucket Notifications
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#requirements" class="md-nav__link">
+    Requirements
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-cases-description" class="md-nav__link">
+    Use-cases Description
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api" class="md-nav__link">
+    API
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#technical-details" class="md-nav__link">
+    Technical Details
+  </a>
+  
+    <nav class="md-nav" aria-label="Technical Details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cloudserver-changes" class="md-nav__link">
+    Cloudserver Changes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backbeat-changes" class="md-nav__link">
+    Backbeat Changes
+  </a>
+  
+    <nav class="md-nav" aria-label="Backbeat Changes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-filters-configuration" class="md-nav__link">
+    Dynamic Filters Configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bucket-notification-queue-populator-event-processing" class="md-nav__link">
+    Bucket Notification Queue Populator: Event Processing
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bucket-notification-processor-actions" class="md-nav__link">
+    Bucket Notification Processor: Actions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pause-resume" class="md-nav__link">
+    Pause &amp; Resume
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#monitoring-metrics" class="md-nav__link">
+    Monitoring &amp; Metrics
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ui" class="md-nav__link">
+    UI
+  </a>
+  
+    <nav class="md-nav" aria-label="UI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#overview-tab" class="md-nav__link">
+    Overview Tab
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#object-lock-tab" class="md-nav__link">
+    Object Lock Tab
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#notification-tab" class="md-nav__link">
+    Notification Tab
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#add-and-edit-notification-modal" class="md-nav__link">
+    Add and Edit Notification Modal
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alternatives" class="md-nav__link">
+    Alternatives
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#list-of-improvements" class="md-nav__link">
+    List of Improvements
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternatives_1" class="md-nav__link">
+    Alternatives
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../object-lock/" title="Object Lock" class="md-nav__link">
+      Object Lock
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../utapi/" title="UTAPI" class="md-nav__link">
+      UTAPI
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../ballot-launcher/" title="Ballot Launcher" class="md-nav__link">
+      Ballot Launcher
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      Release
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Release" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Release
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../release/" title="General" class="md-nav__link">
+      General
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../release/disconnecting/" title="Disconnecting" class="md-nav__link">
+      Disconnecting
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#requirements" class="md-nav__link">
+    Requirements
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-cases-description" class="md-nav__link">
+    Use-cases Description
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api" class="md-nav__link">
+    API
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#technical-details" class="md-nav__link">
+    Technical Details
+  </a>
+  
+    <nav class="md-nav" aria-label="Technical Details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cloudserver-changes" class="md-nav__link">
+    Cloudserver Changes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backbeat-changes" class="md-nav__link">
+    Backbeat Changes
+  </a>
+  
+    <nav class="md-nav" aria-label="Backbeat Changes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-filters-configuration" class="md-nav__link">
+    Dynamic Filters Configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bucket-notification-queue-populator-event-processing" class="md-nav__link">
+    Bucket Notification Queue Populator: Event Processing
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bucket-notification-processor-actions" class="md-nav__link">
+    Bucket Notification Processor: Actions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pause-resume" class="md-nav__link">
+    Pause &amp; Resume
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#monitoring-metrics" class="md-nav__link">
+    Monitoring &amp; Metrics
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ui" class="md-nav__link">
+    UI
+  </a>
+  
+    <nav class="md-nav" aria-label="UI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#overview-tab" class="md-nav__link">
+    Overview Tab
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#object-lock-tab" class="md-nav__link">
+    Object Lock Tab
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#notification-tab" class="md-nav__link">
+    Notification Tab
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#add-and-edit-notification-modal" class="md-nav__link">
+    Add and Edit Notification Modal
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alternatives" class="md-nav__link">
+    Alternatives
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#list-of-improvements" class="md-nav__link">
+    List of Improvements
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternatives_1" class="md-nav__link">
+    Alternatives
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/scality/citadel/edit/development/1.0/docs/design/bucket-notification.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  
+                
+                
+                <h1 id="bucket-notification">Bucket Notification</h1>
+<p>The bucket notification feature enables an external application to
+receive notifications when certain events happen in a bucket.</p>
+<p>The API part of the feature will be built in line with the AWS
+specification while the notification delivery system will be specific
+to our solution, and will permit the delivery through a variety of
+mediums (e.g. RabbitMQ, Kafka, etc).</p>
+<p>We plan to leverage the
+<a href="https://github.com/scality/backbeat">Backbeat</a> component to perform
+the collection of events from the S3C Raft oplog (and later on from
+MongoDB oplog), the queuing and the delivery of events.</p>
+<p>The feature has to be implemented mainly for S3C and eventually be
+implemented for Zenko and Blobserver.</p>
+<h2 id="requirements">Requirements</h2>
+<h2 id="use-cases-description">Use-cases Description</h2>
+<h2 id="api">API</h2>
+<p>The <code>PutBucketNotificationConfiguration</code> API will store the bucket
+configuration in a post-processed way (XML converted to JSON) into the
+<code>metastore</code> special database.</p>
+<p>The structure of a BucketNotificationConfiguration payload looks like
+the one defined in the <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketNotificationConfiguration.html">AWS
+spec</a>
+but is slightly different:</p>
+<p>In the AWS spec it is possible to specify:</p>
+<ul>
+<li>TopicConfiguration: for notifying an event (SNS)</li>
+<li>QueueConfiguration: for queueing an event (SQS)</li>
+<li>CloudFunctionConfiguration: for executing a cloud function (Lambda)</li>
+</ul>
+<p>We plan to only support <code>QueueConfiguration</code> for now.  For each
+<code>QueueConfiguration</code> there are 4 types of items:</p>
+<ul>
+<li><code>Id</code>: a unique user defined ID or automatically generated.</li>
+<li><code>Event</code>: the type of event.</li>
+<li>Optional <code>Filter</code>: define specific sub-filter rules for objects such as <code>prefix</code> and <code>suffix</code>. If not defined it will generate an event for all objects.</li>
+<li><code>QueueArn</code>: the ARN of the target (see thereafter).</li>
+</ul>
+<p>Example of a notification configuration (for a given bucket):</p>
+<div class="highlight"><pre><span></span><code>&lt;NotificationConfiguration&gt;
+     &lt;QueueConfiguration&gt;
+         &lt;Id&gt;MyFilterSet1&lt;/Id&gt;
+         &lt;Event&gt;s3:ObjectCreated:*&lt;/Event&gt;
+         &lt;QueueArn&gt;arn:scality:bucketnotif:::target1&lt;/QueueArn&gt;
+    &lt;/QueueConfiguration&gt;
+    &lt;QueueConfiguration&gt;
+         &lt;Id&gt;MyFilterSet2&lt;/Id&gt;
+         &lt;Event&gt;s3:ObjectCreated:*&lt;/Event&gt;
+         &lt;Filter&gt;
+             &lt;S3Key&gt;
+                 &lt;FilterRule&gt;
+                     &lt;Name&gt;prefix&lt;/Name&gt;
+                     &lt;Value&gt;images&lt;/Value&gt;
+                 &lt;/FilterRule&gt;
+                 &lt;FilterRule&gt;
+                     &lt;Name&gt;suffix&lt;/Name&gt;
+                     &lt;Value&gt;.jpg&lt;/Value&gt;
+              &lt;/FilterRule&gt;
+            &lt;/S3Key&gt;
+        &lt;/Filter&gt;
+        &lt;QueueArn&gt;arn:scality:bucketnotif:::target2&lt;/QueueArn&gt;
+    &lt;/QueueConfiguration&gt;
+&lt;/NotificationConfiguration&gt;
+</code></pre></div>
+
+<p>Event types that will need to support:</p>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>s3:ObjectCreated:*</code>, <code>s3:ObjectCreated:Put</code>, <code>s3:ObjectCreated:Copy</code>, <code>s3:ObjectCreated:CompleteMultipartUpload</code></td>
+<td>Will generate an event respectively every time an object is created (whatever the operation type), written, copied, MPU constituted.</td>
+</tr>
+<tr>
+<td><code>s3:ObjectRemoved:*</code>, <code>s3:ObjectRemoved:Delete</code>, <code>s3:ObjectRemoved:DeleteMarkerCreated</code></td>
+<td>Will generate an event respectively every time an object is deleted (whatever the operation type), deleted, or a delete marker is created.</td>
+</tr>
+</tbody>
+</table>
+<p>Event types that will need to support eventually (in future releases):</p>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>s3:ObjectCreated:Post</code></td>
+<td>Will generate an event every time an object is created.</td>
+</tr>
+<tr>
+<td><code>s3:ObjectRestore:Post</code>, <code>s3:ObjectRestore:Completed</code></td>
+<td>Will generate an event when an object will be restored from an archival storage (e.g. tape, or Glacier)</td>
+</tr>
+<tr>
+<td><code>s3:Replication:OperationFailedReplication</code>, <code>s3:Replication:OperationMissedThreshold</code>, <code>s3:Replication:OperationReplicatedAfterThreshold</code>, <code>s3:Replication:OperationNotTracked</code></td>
+<td>Specific replication related events.</td>
+</tr>
+</tbody>
+</table>
+<p>Since it will be exhausting to redefine the entire SQS API, we define
+our own ARN format for the targets (<code>QueueArn</code>) that will map directly
+to static config:</p>
+<div class="highlight"><pre><span></span><code>arn:partition:service:region:account-id:resource
+</code></pre></div>
+
+<p>With the following ARN mapping:</p>
+<ul>
+<li><code>partition</code> being hardcoded <code>scality</code>.</li>
+<li><code>service</code> being harcoded <code>bucketnotif</code>.</li>
+<li><code>region</code> being ignored.</li>
+<li><code>account-id</code> being ignored.</li>
+<li><code>resource</code> being the name of the static target name (see below).</li>
+</ul>
+<p>In S3C the targets will be specified directly in the <code>group_vars/all</code> as YAML definitions, e.g.:</p>
+<div class="highlight"><pre><span></span><code>env_bucket_notifications:
+  - resource: target1
+    type: rabbitmq
+    host: &lt;somehost&gt;
+    port: &lt;someport&gt;
+    auth:
+    - user: &lt;user&gt;
+      password: &lt;password&gt;
+  - resource: target2
+    type: kafka
+    host: &lt;somehost&gt;
+    port:
+    auth:
+    - cert: certificate path
+</code></pre></div>
+
+<p>For the first version of the service we store the secrets in the configuration.</p>
+<p>In Zenko the targets will be defined in ConfigMaps and Secrets.</p>
+<p>Both Cloudserver and Backbeat need to be aware of the targets configurations.</p>
+<h2 id="technical-details">Technical Details</h2>
+<h3 id="cloudserver-changes">Cloudserver Changes</h3>
+<p>In the <code>PutBucketNotificationConfiguration</code> API, Cloudserver must
+check that the ARN points to a valid target.</p>
+<p>Arsenal needs to be modified to store the operation that generated the
+event in the ObjectMD structure. For this a new field <code>originOp</code> will
+be added in ObjectMD. E.g. it may be structured like this: <code>originOp:
+copy</code>, <code>originOp: delete</code>. We so far stick to the AWS event name
+specification as it is broad enough (we may later extend it for more
+granularity).</p>
+<h3 id="backbeat-changes">Backbeat Changes</h3>
+<p>A specific database oplog consumer (here Metadata oplog, but later
+MongoDB oplog) will filter out the metadata operations according to
+the filters defined in the bucket configuration, interpret the
+<code>originOp</code> field and queue the operations in a specific Backbeat topic
+<code>bucket-notification</code>.</p>
+<p>The bucket notification queue populator will live in its own pod.  We
+plan to use the LogReader class in Backbeat to build the bucket
+notification S3C oplog reader. We plan to leverage this class since it
+already abstracts the different oplogs mechanisms in a unified
+interface. There could be slight changes into the LogReader class as
+it used to be meant for the QueuePopulationExtension mechanism that we
+are going to deprecate.</p>
+<div class="highlight"><pre><span></span><code>+---------+
+|Metadata/|
+|MongoDB  |                      +-----------+
++------+--+                      |Replication|
+       | oplog                   |Processor  |
+       |                         +----+------+
+       |       +---+pod+-------+      |        +-+pod+------+    +-----------------+
+       +------&gt;+Bucket notif   |   +--v---+    |Bucket notif|    |external endpoint|
+               |queue populator+--&gt;+Topic +&lt;---+Processor   +---&gt;+Kafka, RabbitMQ  |
+               +------+--------+   +------+    +----+-------+    +-----------------+
+                      |       filter                |       refilter
+                      |                             |
+                      |          +----------        |
+                      +----------&gt;Zookeeper+&lt;-------+
+                    target       +---------+    read
+                    config                      config
+</code></pre></div>
+
+<p>Note that in order to support <code>s3:replication</code> related events we will
+need to have the replication processor directly writing events in the
+Bucket Notification Topic.</p>
+<p>Having each service (Replication, Ingestion, Bucket notification,
+Workflow engine, etc) in its own pod allows better separation of
+concerns in term of: configuring, scaling, restarting the services.</p>
+<h4 id="dynamic-filters-configuration">Dynamic Filters Configuration</h4>
+<p>The Bucket notification queue populator will get the current
+FilterRules directly from the <code>metastore</code> related oplog events,
+indiscriminately for the initial discovery and for the dynamic changes
+(FilterRules added or removed).</p>
+<p>Note: For S3C listening to all the <code>metastore</code> oplog events is
+scalable because it has its own raft session and we don't expect to
+have too many entries. In the case of Zenko, we may have to do an
+initial discovery directly into the <code>metastore</code> bucket, and then the
+oplog is rotated so we expect it to be relativelty fast to process.</p>
+<p>For each NotificationConfiguration detected we will update a specific
+Zookeeper entry in the path
+<code>/com/scality/backbeat/bucket-notification</code>.
+E.g. <code>/com/scality/backbeat/bucket-notification/&lt;BucketName&gt;/MyFilterSet1</code>
+where <code>BucketName</code> is the name of the bucket, <code>MyFilterSet</code> is the
+unique id defined in the <code>QueueConfiguration</code>. The file will contain
+all the filter rules and the target in JSON format.</p>
+<h4 id="bucket-notification-queue-populator-event-processing">Bucket Notification Queue Populator: Event Processing</h4>
+<p>Each time the Bucket notification queue populator will match an event
+in the oplog according to the active set of filters, it will create an
+entry in the Bucket Notification topic. For sake of disk space we
+only have one global topic for the service, will only record the
+bucket name, object name and type of event (and strip out the metadata
+of the object).</p>
+<p>The bucket notification processor will have to do a refilter (see next
+section) to avoid tagging the entries. This also have the advantage of
+having the processor reflecting immediately the dynamic configuration
+changes and not having a "lag".</p>
+<p>Notes for buckets formats and versioning: For versioned buckets we
+need to ignore the master since there are always 2 updates in a
+batch. We also need to properly manage buckets where versioned has
+been disabled. We also need to manage the new bucket format, by
+potentially skipping the prefix.</p>
+<h4 id="bucket-notification-processor-actions">Bucket Notification Processor: Actions</h4>
+<p>The bucket notification processor will adapt dynamically to bucket
+notification configuration changes (added / deleted filter rules) by
+setting a watcher on the bucket notification Zookeeper path.</p>
+<p>Each target will have its own processor on the topic, consume at its
+own pace, skip entries which do not match and produce in its external
+endpoint. Parallelism will be achieved by having consumer groups.</p>
+<p>Note: When delivering events to the external Kafka for instance, we
+need to be aware that the acknowledgment arrives in the delivery
+report event and not in the callback of the message. To manage this
+problem we can leverage the OffsetLedger class as it has been used in
+the replication mechanism. Retries can be done in memory and
+persistence is done when acknowledging offsets in the commit. Note
+that a message can be delivered more than once but this is not a
+problem since the goal is to deliver the message at least once.</p>
+<h4 id="pause-resume">Pause &amp; Resume</h4>
+<p>TBD</p>
+<h4 id="monitoring-metrics">Monitoring &amp; Metrics</h4>
+<p>TBD</p>
+<h2 id="ui">UI</h2>
+<p>The S3 Browser UI needs to be adapted to this new feature, and should target the following user story:</p>
+<blockquote>
+<p>As a Data Consumer, I want to configure a set of rules to publish notification
+messages in my queuing systems when activity occurs on a bucket so that
+I can monitor data-changes within that particular buckets.</p>
+</blockquote>
+<p>The main change will occurs in the View Bucket Info Modal. Three tabs will be
+added:</p>
+<ul>
+<li><strong>Overview</strong> will provide a summary of the bucket configuration.</li>
+<li><strong>Object Lock</strong> will provide the ability to configure Object Lock feature.</li>
+<li><strong>Notification</strong> will provide the ability to configure Bucket Notification
+  feature.</li>
+</ul>
+<h3 id="overview-tab">Overview Tab</h3>
+<p><img alt="Overview Tab" src="../img/bucket-notification/modal-bucket-view-info-tab-overview.png" /></p>
+<p>Acceptance Criteria:
+*   The overview tab shall contain the old <strong>Overview</strong> section, and the
+  <strong>Permissions</strong> section.
+*   The old <strong>Overview</strong> section name shall be replaced by <strong>Properties</strong>.</p>
+<h3 id="object-lock-tab">Object Lock Tab</h3>
+<p><img alt="Notification Tab" src="../img/bucket-notification/modal-bucket-view-info-tab-object-lock.png" /></p>
+<p>Acceptance Criteria:
+*   The Notification tab shall contain the old <strong>Object Lock Default Settings</strong>
+  section.
+*   The old <strong>Object Lock Default Settings</strong> section name shall be replaced by
+  <strong>Default Settings</strong>.</p>
+<h3 id="notification-tab">Notification Tab</h3>
+<p><img alt="Notification Tab" src="../img/bucket-notification/modal-bucket-view-info-tab-notification.png" /></p>
+<p>Acceptance criteria:
+*   The bucket notification configuration must be retrieved and displayed
+  according to the <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketNotificationConfiguration.html">GetBucketNotificationConfiguration</a> action.
+*   Clicking <strong>ADD NOTIFICATION</strong> button opens <a href="#add-and-edit-notification-modal">add notification modal</a>.
+*   Clicking <strong>Edit</strong> button opens <a href="#add-and-edit-notification-modal">edit notification modal</a>.
+*   Clicking <strong>DELETE</strong> button shall delete all selected rules from the bucket
+  notification using <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketNotificationConfiguration.html">PutBucketNotificationConfiguration</a>
+  action.</p>
+<h3 id="add-and-edit-notification-modal">Add and Edit Notification Modal</h3>
+<p><img alt="Add Notification Modal" src="../img/bucket-notification/modal-add-notification.png" /></p>
+<p><img alt="Add Notification Modal" src="../img/bucket-notification/modal-edit-notification.png" /></p>
+<p>Acceptance criteria:
+*   Pressing the tab key must switch the focus between fields.
+*   If <code>s3:ObjectCreated:*</code> event is selected, then <code>s3:ObjectCreated:Put</code>,
+  <code>s3:ObjectCreated:Post</code>, <code>s3:ObjectCreated:Copy</code>, and
+  <code>s3:ObjectCreated:CompleteMultipartUpload</code> events can't be checked.
+*   If <code>s3:ObjectRemoved:*</code> event is selected, then <code>s3:ObjectRemoved:Delete</code>,
+   and <code>s3:ObjectRemoved:DeleteMarkerCreated</code> events can't be checked.
+*   Clicking <strong>ADD NOTIFICATION RULE</strong> and <strong>EDIT NOTIFICATION RULE</strong> shall
+  update the bucket notification configuration according to inputs using <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketNotificationConfiguration.html">PutBucketNotificationConfiguration</a> action.</p>
+<h3 id="alternatives">Alternatives</h3>
+<p>We could have leveraged tabs on the main pages to avoid modal, and provide
+a better UX. But, the development cost of that change is not compatible with
+our deadlines, and the S3 Browser will be replaced by XDM UI offline in 2021.</p>
+<h3 id="list-of-improvements">List of Improvements</h3>
+<ul>
+<li>Suggest the ARNs during the bucket notification configuration.</li>
+<li>Provide the ability to create the destination queues.</li>
+</ul>
+<h2 id="alternatives_1">Alternatives</h2>
+<p>We could have leveraged the QueuePopulatorExtension mechanism but we
+decided not to. This mechanism relies on the idea that having multiple
+extensions querying the same oplog will overload the source metadata
+engine (as this kind of problems appeared especially on S3C repds).</p>
+<div class="highlight"><pre><span></span><code>+---------+     +---pod--------+
+|Metadata/|oplog|QueuePopulator|
+|MongoDB  +----&gt;+              |
++---------+     +--------------+    +------------+       +---pod------+
+                |QueuePopulator|    |Replication |       |Replication | replication
+                |Extension 1   +----&gt;Topic       &lt;-------+Processor   +-------------&gt;
+                |Replication   |    |(w/ attr)   |       |(Consumer)  |
+                +--------------+    +------------+       +------------+
+                |Workflow      |
+                |Engine Queue  |    +------------+       +---pod----+
+                |Populator     +---&gt;+Workflow    |       |Workflow  | actions
+                +----------+---+    |(uuid)      &lt;-------+engine    +------------&gt;
+                           ^        |(w/ attr or |       |processor |
+                           |        |w/o attr)   |       +-+--------+
+                           |        +------------+         |
+                           |                               |
+                           |   set filter descriptors (ZK) |
+                           +-------------------------------+
+</code></pre></div>
+
+<p>But those load issues have been fixed on S3C so far. The oplog
+management have been correctly abstracted in a class in Backbeat so we
+think it is better to benefit from a clean separation of concerns.</p>
+<p>We think that the concept of QueuePopulatorExtension leads to more
+complex designs (for the workflow engine we had to invent a complex
+way to reconfigure the filters without restarting the replication
+queue populator).</p>
+<p>We also noticed that the ingestion mechanism lives in its own pod but
+still uses the queuePopulatorExtension mechanism by itself, leading to
+a code which is unnecessarily complex. So later on we plan to simplify
+this code. Same for the Workflow engine queue populator that could
+also live in its pod in using the LogReader classes directly. We also
+plan to remove the QueuePopulatorExtension from the code.</p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../" title="General" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                General
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../object-lock/" title="Object Lock" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Object Lock
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/vendor.d710d30a.min.js"></script>
+      <script src="../../assets/javascripts/bundle.5f27aba8.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../..",
+          features: [],
+          search: Object.assign({
+            worker: "../../assets/javascripts/worker/search.27c6a5e6.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="https://unpkg.com/mermaid@8.5.1/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

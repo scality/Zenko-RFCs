@@ -1,0 +1,1201 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <link rel="canonical" href="https://scality.github.io/citadel/design/ballot-launcher/">
+      
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.2.2">
+    
+    
+      
+        <title>Ballot Launcher - Object Squad Handbook</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.a2408e81.min.css">
+      
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.a46bcfb3.min.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#ff7043">
+      
+    
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="black" data-md-color-primary="deep-orange" data-md-color-accent="">
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ballot-launcher" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="https://scality.github.io/citadel" title="Object Squad Handbook" class="md-header-nav__button md-logo" aria-label="Object Squad Handbook">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            Object Squad Handbook
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              Ballot Launcher
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/scality/citadel/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+        
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://scality.github.io/citadel" title="Object Squad Handbook" class="md-nav__button md-logo" aria-label="Object Squad Handbook">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Object Squad Handbook
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/scality/citadel/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1" type="checkbox" id="nav-1">
+    
+    <label class="md-nav__link" for="nav-1">
+      Requirements
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Requirements" data-md-level="1">
+      <label class="md-nav__title" for="nav-1">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Requirements
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../requirements/s3-replication-monitoring/" title="S3 Replication Monitoring" class="md-nav__link">
+      S3 Replication Monitoring
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
+    
+    <label class="md-nav__link" for="nav-2">
+      Design
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Design" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Design
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../" title="General" class="md-nav__link">
+      General
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../bucket-notification/" title="Bucket Notifications" class="md-nav__link">
+      Bucket Notifications
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../object-lock/" title="Object Lock" class="md-nav__link">
+      Object Lock
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../utapi/" title="UTAPI" class="md-nav__link">
+      UTAPI
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Ballot Launcher
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"/></svg>
+        </span>
+      </label>
+    
+    <a href="./" title="Ballot Launcher" class="md-nav__link md-nav__link--active">
+      Ballot Launcher
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#problem" class="md-nav__link">
+    Problem
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-cases" class="md-nav__link">
+    Use Cases
+  </a>
+  
+    <nav class="md-nav" aria-label="Use Cases">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tasks" class="md-nav__link">
+    Tasks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-case-for-developers" class="md-nav__link">
+    Use Case for Developers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-case-for-operations" class="md-nav__link">
+    Use Case for Operations
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#technical-details" class="md-nav__link">
+    Technical Details
+  </a>
+  
+    <nav class="md-nav" aria-label="Technical Details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#principle" class="md-nav__link">
+    Principle
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proposed-ux" class="md-nav__link">
+    Proposed UX
+  </a>
+  
+    <nav class="md-nav" aria-label="Proposed UX">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#run-a-simple-task" class="md-nav__link">
+    Run a Simple Task
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-a-scheduled-task" class="md-nav__link">
+    Run a Scheduled Task
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#show-information-on-a-task" class="md-nav__link">
+    Show Information on a Task
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pause-execution-of-a-task" class="md-nav__link">
+    Pause Execution of a Task
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resume-execution-of-a-task" class="md-nav__link">
+    Resume Execution of a Task
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#list-all-known-tasks" class="md-nav__link">
+    List All Known Tasks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#integration-points" class="md-nav__link">
+    Integration points
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changes-introduced" class="md-nav__link">
+    Changes Introduced
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interaction-with-other-components" class="md-nav__link">
+    Interaction with Other Components
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#monitoring" class="md-nav__link">
+    Monitoring
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#failure-scenarios" class="md-nav__link">
+    Failure Scenarios
+  </a>
+  
+    <nav class="md-nav" aria-label="Failure Scenarios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#leader-election-failure" class="md-nav__link">
+    Leader Election Failure
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-failure" class="md-nav__link">
+    Task Failure
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#zookeeper-failure-after-leader-election" class="md-nav__link">
+    ZooKeeper Failure after Leader Election
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternatives" class="md-nav__link">
+    Alternatives
+  </a>
+  
+    <nav class="md-nav" aria-label="Alternatives">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#other-technologies" class="md-nav__link">
+    Other Technologies
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-approaches" class="md-nav__link">
+    Other Approaches
+  </a>
+  
+    <nav class="md-nav" aria-label="Other Approaches">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#leader-election-functionality" class="md-nav__link">
+    Leader Election Functionality
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cron-functionality" class="md-nav__link">
+    Cron Functionality
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      Release
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Release" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Release
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../release/" title="General" class="md-nav__link">
+      General
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../release/disconnecting/" title="Disconnecting" class="md-nav__link">
+      Disconnecting
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#problem" class="md-nav__link">
+    Problem
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-cases" class="md-nav__link">
+    Use Cases
+  </a>
+  
+    <nav class="md-nav" aria-label="Use Cases">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tasks" class="md-nav__link">
+    Tasks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-case-for-developers" class="md-nav__link">
+    Use Case for Developers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-case-for-operations" class="md-nav__link">
+    Use Case for Operations
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#technical-details" class="md-nav__link">
+    Technical Details
+  </a>
+  
+    <nav class="md-nav" aria-label="Technical Details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#principle" class="md-nav__link">
+    Principle
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proposed-ux" class="md-nav__link">
+    Proposed UX
+  </a>
+  
+    <nav class="md-nav" aria-label="Proposed UX">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#run-a-simple-task" class="md-nav__link">
+    Run a Simple Task
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-a-scheduled-task" class="md-nav__link">
+    Run a Scheduled Task
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#show-information-on-a-task" class="md-nav__link">
+    Show Information on a Task
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pause-execution-of-a-task" class="md-nav__link">
+    Pause Execution of a Task
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resume-execution-of-a-task" class="md-nav__link">
+    Resume Execution of a Task
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#list-all-known-tasks" class="md-nav__link">
+    List All Known Tasks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#integration-points" class="md-nav__link">
+    Integration points
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changes-introduced" class="md-nav__link">
+    Changes Introduced
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interaction-with-other-components" class="md-nav__link">
+    Interaction with Other Components
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#monitoring" class="md-nav__link">
+    Monitoring
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#failure-scenarios" class="md-nav__link">
+    Failure Scenarios
+  </a>
+  
+    <nav class="md-nav" aria-label="Failure Scenarios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#leader-election-failure" class="md-nav__link">
+    Leader Election Failure
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-failure" class="md-nav__link">
+    Task Failure
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#zookeeper-failure-after-leader-election" class="md-nav__link">
+    ZooKeeper Failure after Leader Election
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternatives" class="md-nav__link">
+    Alternatives
+  </a>
+  
+    <nav class="md-nav" aria-label="Alternatives">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#other-technologies" class="md-nav__link">
+    Other Technologies
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-approaches" class="md-nav__link">
+    Other Approaches
+  </a>
+  
+    <nav class="md-nav" aria-label="Other Approaches">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#leader-election-functionality" class="md-nav__link">
+    Leader Election Functionality
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cron-functionality" class="md-nav__link">
+    Cron Functionality
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/scality/citadel/edit/development/1.0/docs/design/ballot-launcher.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  
+                
+                
+                <h1 id="ballot-launcher">Ballot Launcher</h1>
+<h2 id="overview">Overview</h2>
+<p>This specification presents the design for <code>ballot</code>: a coordinated
+task-launching utility.</p>
+<h2 id="problem">Problem</h2>
+<p>The S3C stack currently lacks cluster-wide coordination of maintenance tasks and
+singleton services. This creates issues such as:</p>
+<ul>
+<li>Single points of failure - if the server singled out to run a task (either
+  randomly or because it's the first of a list) becomes unavailable, then the
+  task is not run as expected.</li>
+<li>Risk of concurrent execution of tasks that may interfere with each other.</li>
+<li>Processing load may be uneven.</li>
+<li>Knowing what will run where (and what has run where) requires looking at logs
+  and configuration.</li>
+</ul>
+<h2 id="use-cases">Use Cases</h2>
+<h3 id="tasks">Tasks</h3>
+<p>The following task types will benefit from coordination:</p>
+<ul>
+<li>Scheduled tasks (cron jobs), either on a timetable or an interval between
+  expected runs.</li>
+<li>Always-on services or long-running one-shot commands that should run only one
+  copy for data consistency or resource allocation reasons.</li>
+</ul>
+<h3 id="use-case-for-developers">Use Case for Developers</h3>
+<p>As a developer integrating a new processing job that fits the Impacted Tasks
+definition above, I need a way for the deployment tool (Federation) to schedule
+running the script on all eligible servers without any special treatment at
+install time, with a guarantee that it will not run on multiple servers at the
+same time, but will still run no matter which servers are down.</p>
+<h3 id="use-case-for-operations">Use Case for Operations</h3>
+<p>As an operations person, I need to be sure that maintenance jobs:</p>
+<ul>
+<li>Run when expected regardless of system state.</li>
+<li>Can be easily inspected.</li>
+<li>Can be paused if system state requires it.</li>
+</ul>
+<h2 id="technical-details">Technical Details</h2>
+<h3 id="principle">Principle</h3>
+<p>A launcher, <code>ballot</code> is introduced and used to run commands. Before executing
+the provided command, <code>ballot</code> tries to aquire leadership on a ZooKeeper path
+specific to the command (using the standard leader election recipe). The leader
+then runs the command, while followers wait. When the leader resigns, the next
+follower in line takes over leadership and runs the command.</p>
+<h3 id="proposed-ux">Proposed UX</h3>
+<p>To give a clear idea of expected capabilities, the envisioned user experience is
+described below.</p>
+<h4 id="run-a-simple-task">Run a Simple Task</h4>
+<div class="highlight"><pre><span></span><code>ballot --zookeeper-path /com/scality/tasks/mycluster/consolidate <span class="se">\</span>
+    run once --candidate-id dc01-room01-rack01-server01 -- python consolidate.py
+</code></pre></div>
+
+<h4 id="run-a-scheduled-task">Run a Scheduled Task</h4>
+<div class="highlight"><pre><span></span><code>ballot --zookeeper-path /com/scality/tasks/mycluster/consolidate <span class="se">\</span>
+    run cron --schedule @hourly --candidate-id dc01-room01-rack01-server01 -- python consolidate.py
+</code></pre></div>
+
+<h4 id="show-information-on-a-task">Show Information on a Task</h4>
+<p>Display information on a distributed task. Useful information that may be
+displayed includes: current leader's candidate ID, list of follower's candidate
+IDs, date and time of election, hostname, PID.</p>
+<div class="highlight"><pre><span></span><code>ballot --zookeeper-path /com/scality/tasks/mycluster/consolidate info
+</code></pre></div>
+
+<h4 id="pause-execution-of-a-task">Pause Execution of a Task</h4>
+<p>To conserve resources during an outage or planned maintenance (just disabling
+future elections, not impacting currently running jobs):</p>
+<div class="highlight"><pre><span></span><code>ballot --zookeeper-path /com/scality/tasks/mycluster/consolidate pause
+</code></pre></div>
+
+<p>To terminate currently running jobs:</p>
+<div class="highlight"><pre><span></span><code>ballot --zookeeper-path /com/scality/tasks/mycluster/consolidate pause --terminate
+</code></pre></div>
+
+<h4 id="resume-execution-of-a-task">Resume Execution of a Task</h4>
+<p>To resume a paused job:</p>
+<div class="highlight"><pre><span></span><code>ballot --zookeeper-path /com/scality/tasks/mycluster/consolidate resume
+</code></pre></div>
+
+<h4 id="list-all-known-tasks">List All Known Tasks</h4>
+<p>To show a cluster-wide list of tasks and their status (info such as which node
+is the leader, a list of followers, election time, hostname, PID).</p>
+<div class="highlight"><pre><span></span><code>ballot --zookeeper-path /com/scality/tasks/mycluster status
+</code></pre></div>
+
+<h4 id="integration-points">Integration points</h4>
+<p><code>ballot</code> can be used as a direct <code>ENTRYPOINT</code> in Docker images, as a
+command-line prefix for containers, or as a trampoline in supervisord
+configuration files, whichever is least intrusive.</p>
+<h3 id="changes-introduced">Changes Introduced</h3>
+<p>Where tasks were assigned to one server at deployment time, they instead are
+configured to run on all eligible servers, and use <code>ballot</code> as a launcher, which
+ensures uniqueness and fallback.</p>
+<h3 id="interaction-with-other-components">Interaction with Other Components</h3>
+<p>Ballot requires a functioning ZooKeeper ensemble to operate.</p>
+<p>Given its limited responsibilities, other components/tools are required for
+general operation, such as:</p>
+<ul>
+<li><code>/usr/bin/env</code> for setting environment variables (e.g. <code>ballot run once -- env
+  VAR=value python script.py</code>).</li>
+<li>Log shipping/aggregation as configured in S3C - <code>ballot</code> will pass through the
+  task's logs.</li>
+<li>An always-up process manager (Docker, supervisord) to handle log redirection
+  to a known destination, restart and backoff decisions for the <code>ballot</code> process
+  tree.</li>
+</ul>
+<h3 id="monitoring">Monitoring</h3>
+<p>Monitoring a command run with <code>ballot</code> should be the same as monitoring the same
+command run without ballot; no additional burden should be added. To achieve
+this, the commands's logs and exit code can be passed through <code>ballot</code>.
+Launcher-specific issues can be interpreted as a task failure.</p>
+<p>Monitoring of the task itself should continue as usual, and monitoring of
+ZooKeeper becomes more crucial as more workloads depend on it being available.</p>
+<p>For later consideration: <code>ballot</code> could include some options to integrate with
+existing alerting mechanisms.</p>
+<h3 id="failure-scenarios">Failure Scenarios</h3>
+<h4 id="leader-election-failure">Leader Election Failure</h4>
+<p>If leader election fails for any reason (ZooKeeper down or unreachable, bad
+configuration, ...), the following resolutions can be chosen from:</p>
+<ul>
+<li><code>retry</code>: Retries the election process until a leader is successfully elected.</li>
+<li><code>exit</code>: Exits the <code>ballot</code> process and lets the underlying process manager
+  (<code>docker</code>, <code>supervisord</code>, ...) apply its restart and backoff policy.</li>
+<li><code>run-anyway</code>: Ignores the failure and runs the command anyway. This is useful
+  in case it's more important to have the command run, even if it is run
+  multiple times in parallel, than for it to not run at all.</li>
+</ul>
+<h4 id="task-failure">Task Failure</h4>
+<p>Tasks can fail for reasons such as unhealthy host, network issue/partition,
+application bug w.r.t. bad data handling, etc. No unique solution would work, so
+a range of resolutions can be chosen from:</p>
+<ul>
+<li><code>reelect</code>: Drops leadership so that a new leader election can take place,
+  potentially allowing a more healthy host to take over.</li>
+<li><code>rerun</code>: Runs the command again immediately, and repeats until the command
+  succeeds.</li>
+<li><code>exit</code>: Exits the <code>ballot</code> process and lets the underlying process manager
+  Docker, supervisord, ...) apply its restart and backoff policy.</li>
+<li><code>ignore</code>: Ignores the failure and exits with a success code anyway. In cron
+  mode, ignores the failure and waits for the next scheduled trigger.</li>
+</ul>
+<p>Note: failures to execute the command (like a missing binary) are handled by the
+same mechanism as failure of a command that was <code>exec</code>'d successfully. In this
+case, a failure policy of <code>reelect</code> would make sense while <code>rerun</code> would not be
+of much help.</p>
+<p>Note: for flexibility, the same actions can be performed on successful
+completion of the child process.</p>
+<h4 id="zookeeper-failure-after-leader-election">ZooKeeper Failure after Leader Election</h4>
+<p>If ZooKeeper loses quorum, crashes, or becomes unreachable, <code>ballot</code> will try to
+reconnect in the background, and in the meantime not take any action:</p>
+<ul>
+<li>The leader still considers itself the leader, and carries on with waiting for
+  its child process completion. In cron mode, it continues scheduling.</li>
+<li>Any followers will continuously try to become leaders (or be restarted)
+  according to the Leader Election Failure policy described above, and should
+  not succeed.</li>
+</ul>
+<p>Upon reconnection to ZooKeeper, <code>ballot</code> ZooKeeper session IDs are matched to
+the owners of the ephemeral proposal znodes, picking up the leader/follower
+roles as they were before the disruption. If any <code>ballot</code> process was started
+after the disruption, then it will automatically join as a follower, as long as
+some <code>ballot</code> processes with longer-running session IDs are present.</p>
+<p>In the special case where ballot processes are configured to <code>exit</code> or <code>reelect</code>
+and are not run in <code>cron</code> mode, once all commands are done running, nothing will
+run until ZooKeeper is back online, which can be seen as the worst-case
+scenario.</p>
+<h2 id="alternatives">Alternatives</h2>
+<h3 id="other-technologies">Other Technologies</h3>
+<p>Tools such as <a href="http://www.unixwiz.net/tools/lockrun.html"><code>lockrun</code></a> are often
+used by sysadmins and provide the solution to the "at most once" problem on a
+single server/container, but still require coordination so that no single server
+is considered special and can still be taken out of service without impacting
+task availability.</p>
+<p>Kubernetes provides resources that solve these problems such as <code>jobs</code>,
+<code>cronjobs</code>, <code>statefulsets</code> with one replica. However S3C does not run on
+Kubernetes.</p>
+<p><a href="https://dkron.io/">Dkron</a> comes with its own Raft quorum, which adds deployment
+and operation burden. Its free/commercial split license can be inconvenient.</p>
+<p><a href="https://github.com/mesos/chronos">Chronos</a> is very complete and comes with good
+reporting capabilities. It runs on top of Mesos, which makes it heavy and
+impractical in the context of S3C.</p>
+<h3 id="other-approaches">Other Approaches</h3>
+<h4 id="leader-election-functionality">Leader Election Functionality</h4>
+<p>Since the primary goal was to be as unintrusive and scalable (developer-time
+wise) as possible, implementing a leader election in each task type was not a
+viable option.</p>
+<h4 id="cron-functionality">Cron Functionality</h4>
+<p>To keep things simple and focused, one approach considered was to not include
+the <code>cron</code> functionality in <code>ballot</code>, and instead either:</p>
+<ul>
+<li>Have each targeted task implement the cron functionality itself. Ruled out
+  because of code reusability concerns, and lots of boilerplate involved in the
+  leader election.</li>
+<li>Run <code>ballot run my-command</code> in a crontab line. This is prone to overflowing
+  ZooKeeper if executions were to stack up waiting for their turn. Implementing
+  invocation tracking would also be required to make sure that once a scheduled
+  invocation finishes successfully, no other should run for the same trigger.</li>
+<li>Run <code>ballot run anacron -t my-crontab-file</code>. This is close to a workable
+  solution, but increases the work needed for integration as it does not allow
+  "smart" retry policies, and pass-through of exit codes and logs.</li>
+</ul>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../utapi/" title="UTAPI" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                UTAPI
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../../release/" title="General" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                General
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/vendor.d710d30a.min.js"></script>
+      <script src="../../assets/javascripts/bundle.5f27aba8.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../..",
+          features: [],
+          search: Object.assign({
+            worker: "../../assets/javascripts/worker/search.27c6a5e6.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="https://unpkg.com/mermaid@8.5.1/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

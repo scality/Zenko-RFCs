@@ -1,0 +1,1018 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <link rel="canonical" href="https://scality.github.io/citadel/design/object-lock/">
+      
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.2.2">
+    
+    
+      
+        <title>Object Lock - Object Squad Handbook</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.a2408e81.min.css">
+      
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.a46bcfb3.min.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#ff7043">
+      
+    
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="black" data-md-color-primary="deep-orange" data-md-color-accent="">
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#object-locking-using-s3-object-lock" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="https://scality.github.io/citadel" title="Object Squad Handbook" class="md-header-nav__button md-logo" aria-label="Object Squad Handbook">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            Object Squad Handbook
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              Object Lock
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/scality/citadel/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+        
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://scality.github.io/citadel" title="Object Squad Handbook" class="md-nav__button md-logo" aria-label="Object Squad Handbook">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Object Squad Handbook
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/scality/citadel/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1" type="checkbox" id="nav-1">
+    
+    <label class="md-nav__link" for="nav-1">
+      Requirements
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Requirements" data-md-level="1">
+      <label class="md-nav__title" for="nav-1">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Requirements
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../requirements/s3-replication-monitoring/" title="S3 Replication Monitoring" class="md-nav__link">
+      S3 Replication Monitoring
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
+    
+    <label class="md-nav__link" for="nav-2">
+      Design
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Design" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Design
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../" title="General" class="md-nav__link">
+      General
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../bucket-notification/" title="Bucket Notifications" class="md-nav__link">
+      Bucket Notifications
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Object Lock
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"/></svg>
+        </span>
+      </label>
+    
+    <a href="./" title="Object Lock" class="md-nav__link md-nav__link--active">
+      Object Lock
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#requirements" class="md-nav__link">
+    Requirements
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-happens-when-an-object-is-locked" class="md-nav__link">
+    What happens when an object is locked
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#controlling-locking-of-an-object" class="md-nav__link">
+    Controlling locking of an object
+  </a>
+  
+    <nav class="md-nav" aria-label="Controlling locking of an object">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#retention-modes" class="md-nav__link">
+    Retention Modes
+  </a>
+  
+    <nav class="md-nav" aria-label="Retention Modes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#governance-mode" class="md-nav__link">
+    Governance mode
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compliance-mode" class="md-nav__link">
+    Compliance mode
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retention-period" class="md-nav__link">
+    Retention Period
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#legal-hold" class="md-nav__link">
+    Legal Hold
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implementation" class="md-nav__link">
+    Implementation
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#storing-object-lock-configuration" class="md-nav__link">
+    Storing Object lock configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#processing-delete-requests" class="md-nav__link">
+    Processing DELETE requests
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lifecycle-actions" class="md-nav__link">
+    Lifecycle actions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replication" class="md-nav__link">
+    Replication
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#apis-covering-s3-object-lock" class="md-nav__link">
+    APIs covering S3 Object lock
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deviations" class="md-nav__link">
+    Deviations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration-tool" class="md-nav__link">
+    Migration tool
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#faq" class="md-nav__link">
+    FAQ
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../utapi/" title="UTAPI" class="md-nav__link">
+      UTAPI
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../ballot-launcher/" title="Ballot Launcher" class="md-nav__link">
+      Ballot Launcher
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      Release
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Release" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Release
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../release/" title="General" class="md-nav__link">
+      General
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../release/disconnecting/" title="Disconnecting" class="md-nav__link">
+      Disconnecting
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#requirements" class="md-nav__link">
+    Requirements
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-happens-when-an-object-is-locked" class="md-nav__link">
+    What happens when an object is locked
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#controlling-locking-of-an-object" class="md-nav__link">
+    Controlling locking of an object
+  </a>
+  
+    <nav class="md-nav" aria-label="Controlling locking of an object">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#retention-modes" class="md-nav__link">
+    Retention Modes
+  </a>
+  
+    <nav class="md-nav" aria-label="Retention Modes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#governance-mode" class="md-nav__link">
+    Governance mode
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compliance-mode" class="md-nav__link">
+    Compliance mode
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retention-period" class="md-nav__link">
+    Retention Period
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#legal-hold" class="md-nav__link">
+    Legal Hold
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implementation" class="md-nav__link">
+    Implementation
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#storing-object-lock-configuration" class="md-nav__link">
+    Storing Object lock configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#processing-delete-requests" class="md-nav__link">
+    Processing DELETE requests
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lifecycle-actions" class="md-nav__link">
+    Lifecycle actions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replication" class="md-nav__link">
+    Replication
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#apis-covering-s3-object-lock" class="md-nav__link">
+    APIs covering S3 Object lock
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deviations" class="md-nav__link">
+    Deviations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration-tool" class="md-nav__link">
+    Migration tool
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#faq" class="md-nav__link">
+    FAQ
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/scality/citadel/edit/development/1.0/docs/design/object-lock.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  
+                
+                
+                <h1 id="object-locking-using-s3-object-lock">Object Locking using S3 Object Lock</h1>
+<p>Object locking is a feature built for addressing use cases in which the
+Write Once Read Many (WORM) model is required. The feature will be built in line
+with the AWS specification. Any extensions to the specification will be explicitly
+documented. The feature implementation has the end goal of meeting
+SEC 17a-4 compliance.</p>
+<h2 id="requirements">Requirements</h2>
+<ul>
+<li>
+<p>Object lock flag must be set during bucket creation</p>
+</li>
+<li>
+<p>Versioning has to be enabled on the bucket (it is enabled
+  automatically at creation time when object lock flag is set)</p>
+</li>
+<li>
+<p>Object lock must be enabled on a bucket in order to write a lock configuration
+  using the PUT Object Lock Configuration api that has object lock flag set</p>
+</li>
+</ul>
+<p>PS: AWS S3 specification does not have a way of setting object lock on existing
+buckets. To enable object lock flag on an existing bucket, a tool provided by
+Scality can be used <a href="#migration-tool">see migration tool section</a>.</p>
+<p><strong>Objects that were created before the lock is set are not protected by
+  Object Locking.</strong></p>
+<h2 id="what-happens-when-an-object-is-locked">What happens when an object is locked</h2>
+<p>When set on an object version, a lock prevents deletes and overwrites on that
+version until the lock expires. However, the lock doesn't prevent creation of
+delete markers or new versions on top of the locked version.</p>
+<p>Object locking also protects objects from Lifecycle actions, i.e
+a Lifecycle expiry rule cannot delete an object version until the lock
+on the object expires.</p>
+<h2 id="controlling-locking-of-an-object">Controlling locking of an object</h2>
+<p>S3 provides a few ways through which the lock configuration of an object can
+be set</p>
+<h3 id="retention-modes">Retention Modes</h3>
+<p>Both Governance and Compliance modes retain the lock on an object until the set
+retention period expires.</p>
+<h4 id="governance-mode">Governance mode</h4>
+<p>In addition to preventing deletions on an object version by users,
+<code>GOVERNANCE</code> mode allows delegating permission to certain users to override
+the lock settings, for example by changing the retention mode, period
+or deleting the object altogether.
+Either the root (account) or a user with <code>s3:BypassGovernanceRetention</code>
+permission can send a delete request with
+<code>x-amz-bypass-governance-retention:true</code> header to override and delete the
+object.</p>
+<h4 id="compliance-mode">Compliance mode</h4>
+<p>When a lock is placed on an object using <code>COMPLIANCE</code> mode, the object version
+cannot be deleted by any user until the retention period expires.
+This includes root user (account credentials) in the account and no other user
+can be given permission either to override the settings or delete the version.</p>
+<h3 id="retention-period">Retention Period</h3>
+<p>Retention period defines the term during which the object is protected from
+deletes.
+Retention period can be set on the bucket level, which acts as a default for all
+objects put in the bucket after the setting is applied. The default retention
+period set on a bucket can be overridden on the object level by setting the date
+and time using the header <code>x-amz-object-lock-retain-until-date</code>.</p>
+<p><strong>Buckets</strong> -  retention period can be set in either <code>days</code> or <code>years</code>, but not
+both at the same time.</p>
+<p><strong>Objects</strong> - retention period can be set as date and time when the object is
+expected to expire.</p>
+<h3 id="legal-hold">Legal Hold</h3>
+<p>Legal hold can be enabled on an object version. Once a legal hold is enabled,
+regardless of the object's retention date or retention mode, the object version
+cannot be deleted until the legal hold is removed.
+Legal hold can be set on an object version during PUT Object request by setting
+<code>x-amz-object-lock-legal-hold</code> header or using PUT Object Legal Hold API
+request.
+Root users with account credentials or IAM users who are given the permission
+<code>s3:PutObjectLegalHold</code> are allowed to set Legal hold on an object version.</p>
+<h3 id="implementation">Implementation</h3>
+<h4 id="storing-object-lock-configuration">Storing Object lock configuration</h4>
+<p>Object lock can be enabled on a bucket during bucket creation using
+<code>x-amz-bucket-object-lock-enabled</code> header. This is stored along with the
+bucket's metadata defined in the BucketInfo model.
+Any default lock settings (governance/compliance mode, days/years for retention
+period) defined using <code>PutObjectLockConfiguration</code> request are stored
+as part of the bucket metadata.
+When a PUT Object request is received, the lock configuration is evaluated and
+the lock expiration date and time is calculated and set as <code>retain-until-date</code>
+property on the object's metadata.
+Lock configuration on a PUT object request is evaluated in the following order:</p>
+<ol>
+<li>
+<p>Object's configuration in the PUT Object for retention mode/period</p>
+</li>
+<li>
+<p>Bucket's configuration for retention mode/period</p>
+</li>
+</ol>
+<p>The object's settings override the bucket's settings when calculating the
+<code>retain-until-date</code> date and time to be stored on the object's metadata.</p>
+<p>The lock configuration on an object version can also be changed using
+<code>PutObjectRetention</code> api request if the user has appropriate
+permission to make the request, in either of the following cases:</p>
+<ul>
+<li>
+<p>when the object has no prior retention mode set or if a previous
+  retention policy has already expired</p>
+</li>
+<li>
+<p>when the request extends the retention period later than the
+  existing retention deadline</p>
+</li>
+<li>
+<p>if the object has <code>GOVERNANCE</code> mode set and the request includes the
+  <code>x-amz-bypass-governance-retention:true</code> header</p>
+</li>
+</ul>
+<p>Note: Delete markers do not have any object lock protection</p>
+<h4 id="processing-delete-requests">Processing DELETE requests</h4>
+<p>Whenever requests such as DELETE object using version-id,
+Multi-Object DELETE specifying version-id or a Lifecycle action to
+permanently delete the object version are received, the current date and time is
+compared against the <code>retain-until-date</code> set on the object and the client will
+receive an <code>Access Denied</code> error if the current date and time is less than the
+<code>retain-until-date</code> set on the object.
+When the current date and time exceeds the <code>retain-until-date</code>, deletes on the
+object version are not prevented by the object lock mechanism. There is no cleanup
+action to remove the <code>retain-until-date</code> set on the object version's metadata once the
+<code>retain-until-date</code> expires.
+DELETE object requests without a version id result in creation of delete markers
+on top of the object version, even if the object has a lock configuration set
+and the <code>retain-until-date</code> is current.</p>
+<h4 id="lifecycle-actions">Lifecycle actions</h4>
+<p>Lifecycle jobs can create delete markers on the object but cannot permanently
+delete an object version that is locked until the lock expires.</p>
+<h4 id="replication">Replication</h4>
+<p>The lock configuration on the object version in a source bucket is copied over
+to the destination bucket only if object lock is enabled on the destination
+bucket. Otherwise, the lock is ignored in the destination bucket.</p>
+<h2 id="apis-covering-s3-object-lock">APIs covering S3 Object lock</h2>
+<ul>
+<li><strong>Put Bucket</strong> - extend the bucket creation API to include configuration for
+  enabling object lock on the bucket</li>
+</ul>
+<p><strong>Note:</strong> Versioning is automatically enabled on buckets that have object lock
+  enabled as part of a PUT Bucket request</p>
+<ul>
+<li>
+<p><strong>Put Object</strong> - extend put object API to parse <code>x-amz-object-lock-mode</code>,
+  <code>x-amz-object-lock-retain-until-date</code>, <code>x-amz-object-lock-legal-hold</code>
+  headers and store the configuration on an object.</p>
+</li>
+<li>
+<p><strong>Copy Object</strong> - extend the API to accept the same lock configuration
+  headers as the PUT Object request</p>
+</li>
+<li>
+<p><strong>Create Multipart Upload</strong> - extend the API to accept the same lock
+  configuration headers as the PUT Object request</p>
+</li>
+<li>
+<p><strong>Put Object Lock Configuration</strong> - allows setting a default lock
+  configuration for objects that are going to be stored in the bucket. This
+  request is accepted only on buckets that have object lock enabled.</p>
+</li>
+<li>
+<p><strong>Get Object Lock Configuration</strong> - gets the object lock configuration set on
+  the bucket metadata</p>
+</li>
+<li>
+<p><strong>Put Object Retention</strong> - sets the retention mode/period configuration on a
+  object version</p>
+</li>
+<li>
+<p><strong>Get Object Retention</strong> - gets the retention mode/period configuration set
+  on a object version</p>
+</li>
+<li>
+<p><strong>Put Object Legal Hold</strong> - sets legal hold configuration on an object version</p>
+</li>
+<li>
+<p><strong>Get Object Legal Hold</strong> - gets the legal hold status for an object version</p>
+</li>
+</ul>
+<h2 id="deviations">Deviations</h2>
+<p>The following hightlights any deviation from AWS implementation of the feature</p>
+<ul>
+<li><code>token</code></li>
+</ul>
+<p>AWS allows setting object lock on existing buckets by asking the user to
+  contact support, the support then gives a <code>token</code> that can be used to set lock
+  on the specific bucket. Cloudserver's implementation differs in the way that
+  we will use a tool to enable object lock by modifying the bucket's configuration</p>
+<h2 id="migration-tool">Migration tool</h2>
+<p>Migration tool will be available to enable lock on an existing bucket. This tool
+will be available in s3utils to be used at a customer.</p>
+<h2 id="faq">FAQ</h2>
+<ol>
+<li>Q: What error code does the client get when a delete version request is sent on
+   a locked object?</li>
+</ol>
+<p>A: Access Denied</p>
+<ol>
+<li>Q: Can an object set with GOVERNANCE retention mode be deleted with account
+   credentials?</li>
+</ol>
+<p>A: Yes, if the delete object request is sent is along with
+   <code>x-amz-bypass-governance-retention:true</code> header. This header needs to be
+   explicitly set and is disabled by default on all AWS SDKs and AWS CLI.</p>
+<ol>
+<li>Q: Does placing a lock on an object version generate a new version?</li>
+</ol>
+<p>A: No. It updates the object version with retention settings without
+   generating a new version-id or updating the <code>Last-Modified</code> date on the
+   object version.</p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../bucket-notification/" title="Bucket Notifications" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Bucket Notifications
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../utapi/" title="UTAPI" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                UTAPI
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/vendor.d710d30a.min.js"></script>
+      <script src="../../assets/javascripts/bundle.5f27aba8.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../..",
+          features: [],
+          search: Object.assign({
+            worker: "../../assets/javascripts/worker/search.27c6a5e6.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="https://unpkg.com/mermaid@8.5.1/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

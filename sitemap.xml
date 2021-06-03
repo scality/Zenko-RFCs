@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url>
+     <loc>https://scality.github.io/citadel/requirements/s3-replication-monitoring/</loc>
+     <lastmod>2021-06-03</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://scality.github.io/citadel/design/</loc>
+     <lastmod>2021-06-03</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://scality.github.io/citadel/design/bucket-notification/</loc>
+     <lastmod>2021-06-03</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://scality.github.io/citadel/design/object-lock/</loc>
+     <lastmod>2021-06-03</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://scality.github.io/citadel/design/utapi/</loc>
+     <lastmod>2021-06-03</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://scality.github.io/citadel/design/ballot-launcher/</loc>
+     <lastmod>2021-06-03</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://scality.github.io/citadel/release/</loc>
+     <lastmod>2021-06-03</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://scality.github.io/citadel/release/disconnecting/</loc>
+     <lastmod>2021-06-03</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+</urlset>
