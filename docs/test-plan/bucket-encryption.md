@@ -1,64 +1,51 @@
+# Bucket Encryption Test Plan
 
-###########################
-Bucket Encryption Test Plan
-###########################
+## Deployment
 
-**********
-Deployment
-**********
+### Deployment through Federation
 
-Deployment through Federation
-=============================
+#### Actions
 
-Actions
-^^^^^^^
+* Deploy the KMS appliance to test in a single instance using [these instructions]
+  (https://documentation.scality.com/S3C/7.9.0/installation/install_s3c/Configuring_the_S3_Cluster/additional_features/encryption+key_mgmt_configuration.html).
 
-* Deploy the KMS appliance to test in a single instance using `these instructions
-  <https://documentation.scality.com/S3C/7.9.0/installation/install_s3c/Configuring_the_S3_Cluster/additional_features/encryption+key_mgmt_configuration.html>`_.
-
-Expected Results
-^^^^^^^^^^^^^^^^
+#### Expected Results
 
 * Successful deployment
 * The KMS is up and running
 
-Automation Status
-^^^^^^^^^^^^^^^^^
+#### Automation Status
 
 * Not yet
 
-**********
-Functional
-**********
+## Functional
 
-Bucket Encryption Correctness
-=============================
+### Bucket Encryption Correctness
 
-Actions
-^^^^^^^
+#### Actions
 
-* Create a bucket with name ``encrypted-bucket``
+* Create a bucket with name `encrypted-bucket`
 * With the AWS CLI:
 
   * Create a bucket encryption configuration in JSON format:
 
-  .. code::
-
-     {
-       "Rules": [
-         {
-           "ApplyServerSideEncryptionByDefault": {
-               "SSEAlgorithm": "AES256"
-           }
-         }
-       ]
-     }
+  ```
+  {
+    "Rules": [
+      {
+        "ApplyServerSideEncryptionByDefault": {
+            "SSEAlgorithm": "AES256"
+        }
+      }
+    ]
+  }
+  ```
 
   * Apply the bucket encryption configuration to the bucket:
 
-  .. code::
-
-     aws s3api put-bucket-encryption --bucket encrypted-bucket-1 --server-side-encryption-configuration file:///tmp/encryption.json
+  ```
+  aws s3api put-bucket-encryption --bucket encrypted-bucket-1 --server-side-encryption-configuration file:///tmp/encryption.json
+  ```
 
   * Create a empty object `empty-obj` in the bucket
   * Create an 1KB object `1kb-obj` in the bucket with random data
@@ -67,8 +54,7 @@ Actions
   * Do a HEAD on each object
   * Do a GET on each object
 
-Expected Results
-^^^^^^^^^^^^^^^^
+#### Expected Results
 
 * Bucket encryption configuration was successfully applied
 
@@ -76,23 +62,18 @@ Expected Results
 
 * Each object data from the GET matches what has been put.
 
-Automation Status
-^^^^^^^^^^^^^^^^^
+#### Automation Status
 
 * Not yet
 
-***********
-Performance
-***********
+## Performance
 
 In the following steps, make sure that the cosbench drivers run on a separate
 host to avoid any interference.
 
-Bandwidth
-=========
+### Bandwidth
 
-Actions
-^^^^^^^
+#### Actions
 
 * Setup a KMS cluster on the S3C deployment, sized with performance in mind
 * Create a bucket `unencrypted-bucket` without encryption
@@ -103,8 +84,7 @@ Actions
   * GETs these objects continuously for about 10 minutes
   * DELETEs these objects
 
-Expected Results
-^^^^^^^^^^^^^^^^
+#### Expected Results
 
 * Cosbench shows no errors in the run summary.
 * Latencies are relatively stable (some variance is ok because of the big
@@ -139,16 +119,13 @@ Expected Results
 * Observe the KMS cluster logs, there should be no error, or errors
   should be identified and explained
 
-Automation Status
-^^^^^^^^^^^^^^^^^
+#### Automation Status
 
 * Not yet
 
-IOPS
-====
+### IOPS
 
-Actions
-^^^^^^^
+#### Actions
 
 * Setup a KMS cluster on the S3C deployment, sized with performance in mind
 * Create a bucket `unencrypted-bucket` without encryption
@@ -159,8 +136,7 @@ Actions
   * GETs these objects continuously for about 10 minutes
   * DELETEs these objects
 
-Expected Results
-^^^^^^^^^^^^^^^^
+#### Expected Results
 
 * Cosbench shows no errors in the run summary.
 * Latencies are relatively stable and smaller than 8ms, without much variation
@@ -197,7 +173,6 @@ Expected Results
 * Observe the KMS cluster logs, there should be no error, or errors
   should be identified and explained
 
-Automation Status
-^^^^^^^^^^^^^^^^^
+#### Automation Status
 
 * Not yet
