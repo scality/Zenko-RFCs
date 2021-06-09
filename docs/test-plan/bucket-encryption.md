@@ -26,6 +26,7 @@
   * Create a bucket encryption configuration in JSON format:
 
   ```
+  cat > encryption.json <<EOF
   {
     "Rules": [
       {
@@ -35,12 +36,15 @@
       }
     ]
   }
+  EOF
   ```
 
   * Apply the bucket encryption configuration to the bucket:
 
   ```
-  aws s3api put-bucket-encryption --bucket encrypted-bucket-1 --server-side-encryption-configuration file:///tmp/encryption.json
+  aws s3api put-bucket-encryption \
+      --bucket encrypted-bucket-1 \
+      --server-side-encryption-configuration file://encryption.json
   ```
 
   * Create an empty object `empty-obj` in the bucket
