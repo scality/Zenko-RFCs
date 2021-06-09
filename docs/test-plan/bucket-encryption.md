@@ -57,9 +57,7 @@
 #### Expected Results
 
 * Bucket encryption configuration was successfully applied
-
 * Each object metadata from the HEAD request shows that it is encrypted using AES256.
-
 * Each object data from the GET matches what has been put.
 
 #### Automation Status
