@@ -47,7 +47,7 @@
   aws s3api put-bucket-encryption --bucket encrypted-bucket-1 --server-side-encryption-configuration file:///tmp/encryption.json
   ```
 
-  * Create a empty object `empty-obj` in the bucket
+  * Create an empty object `empty-obj` in the bucket
   * Create an 1KB object `1kb-obj` in the bucket with random data
   * Create an 1MB object `1mb-obj` in the bucket with random data
   * Create an 1GB MPU object `1gb-obj` in the bucket with random data
