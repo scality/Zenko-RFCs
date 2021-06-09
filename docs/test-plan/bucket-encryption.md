@@ -48,9 +48,9 @@
   ```
 
   * Create an empty object `empty-obj` in the bucket
-  * Create an 1KB object `1kb-obj` in the bucket with random data
-  * Create an 1MB object `1mb-obj` in the bucket with random data
-  * Create an 1GB MPU object `1gb-obj` in the bucket with random data
+  * Create a 1KB object `1kb-obj` in the bucket with random data
+  * Create a 1MB object `1mb-obj` in the bucket with random data
+  * Create a 1GB MPU object `1gb-obj` in the bucket with random data
   * Do a HEAD on each object
   * Do a GET on each object
 
