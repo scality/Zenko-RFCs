@@ -14,10 +14,6 @@
 * Successful deployment
 * The KMS is up and running
 
-#### Automation Status
-
-* Not yet
-
 ## Functional
 
 ### Bucket Encryption Correctness
@@ -59,10 +55,6 @@
 * Bucket encryption configuration was successfully applied
 * Each object metadata from the HEAD request shows that it is encrypted using AES256.
 * Each object data from the GET matches what has been put.
-
-#### Automation Status
-
-* Not yet
 
 ## Performance
 
@@ -117,10 +109,6 @@ host to avoid any interference.
 * Observe the KMS cluster logs, there should be no error, or errors
   should be identified and explained
 
-#### Automation Status
-
-* Not yet
-
 ### IOPS
 
 #### Actions
@@ -170,7 +158,3 @@ host to avoid any interference.
   should be explained if any (e.g. network is saturated)
 * Observe the KMS cluster logs, there should be no error, or errors
   should be identified and explained
-
-#### Automation Status
-
-* Not yet
