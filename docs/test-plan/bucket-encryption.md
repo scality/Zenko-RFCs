@@ -162,3 +162,51 @@ host to avoid any interference.
   should be explained if any (e.g. network is saturated)
 * Observe the KMS cluster logs, there should be no error, or errors
   should be identified and explained
+
+## Failure Tests
+
+### KMS Single Instance Failure
+
+#### Actions
+
+* Setup a KMS instance on the S3C deployment
+* Create a bucket `encrypted-bucket` with a default encryption of type AES256
+* run a 128-worker cosbench workload that does a mixed workload of 33%
+  PUT, 33% GET, 33% DELETE continuously for about 10 minutes, with
+  size 32kB
+* Stop the KMS instance during the cosbench test, for one minute
+* Restart the KMS instance
+* DELETEs the remaining objects
+
+#### Expected Results
+
+* Cosbench shows errors in the run summary due to the single-instance
+  KMS being down
+* There should be errors in cloudserver logs, but no exception or
+  crash should have occurred
+
+### KMS Multi Instance Failure
+
+Note: not planned for now as part of 7.10 release as discussion about
+load balancing has not been clarified: should we support and test
+failover in S3C, or rely on a load balancer setup by the customer that
+does the failover, in which case we rely on a single highly available
+KMS endpoint?
+
+#### Actions
+
+* Setup a KMS cluster with 3 instances on the S3C deployment
+* Create a bucket `encrypted-bucket` with a default encryption of type AES256
+* run a 128-worker cosbench workload that does a mixed workload of 33%
+  PUT, 33% GET, 33% DELETE continuously for about 10 minutes, with
+  size 32kB
+* Stop one of the KMS instances during the cosbench test, for one minute
+* Restart the stopped KMS instance
+* DELETEs the remaining objects
+
+#### Expected Results
+
+* Cosbench should show no error in the run summary due to a
+  single-instance KMS being down
+* There should not be client errors in cloudserver logs, only internal
+  logs describing the fallback situation
