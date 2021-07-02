@@ -1,6 +1,8 @@
 # CRR Metrics
 
-## Queue Populator Flow
+## Queue Populator
+
+### Flow
 ```mermaid
 sequenceDiagram
     participant raft as Raft Log
@@ -15,7 +17,31 @@ sequenceDiagram
     Prometheus-->>pop: Scrape metrics
 ```
 
-## Queue Processor Flow
+### Metrics
+
+| Name | Help | Type |
+| ---- | ---- | ---- |
+replication_read_offset | Current read offset of metadata journal | Gauge
+replication_log_size | Current size of metadata journal | Gauge
+replication_queued_messages | Total number of kakfa messages produced by the queue populator | Counter
+replication_queued_objects | Total objects queued for replication | Counter
+replication_queued_bytes | Total number of bytes queued for replication not including metadata | Counter
+
+### Labels
+
+| Name | Description |
+| ---- | ----------- |
+serviceName | Name of the service where metrics are coming from, used to distinguish general metrics
+origin | What method began the action we are doing
+logName | What type of log reader we are reading from
+logId | Unique ID of the log reader such as the raft ID.
+containerName | Name of the docker container
+publishStatus | Status of publishing a kafka message
+
+## Queue Processor
+
+### Flow
+
 ```mermaid
 sequenceDiagram
     participant Kafka
@@ -36,7 +62,29 @@ sequenceDiagram
     Prometheus-->>proc: Scrape push metrics
 ```
 
-## Status Processor Flow
+### Metrics
+
+| Name | Help | Type |
+| ---- | ---- | ---- |
+replication_processed_messages | Total number of kakfa messages consumed by the queue processor | Counter
+replication_processed_objects | Number of objects replicated | Counter
+replication_processed_bytes | Number of bytes replicated not including metadata | Counter
+replication_processor_elapsed_seconds | Replication jobs elapsed time in seconds | Histogram
+replication_queued_messages | Total number of kakfa messages produced by the queue processor, for status processing | Counter
+
+### Labels
+
+| Name | Description |
+| ---- | ----------- |
+serviceName | Name of the service where metrics are coming from, used to distinguish general metrics
+origin | What method began the action we are doing
+containerName | Name of the docker container
+publishStatus | Status of publishing a kafka message
+
+## Status Processor
+
+### Flow
+
 ```mermaid
 sequenceDiagram
     participant Kafka
@@ -51,31 +99,25 @@ sequenceDiagram
     Prometheus-->>proc: Scrape metrics
 ```
 
-## Metrics
+### Metrics
+
 | Name | Help | Type |
 | ---- | ---- | ---- |
-replication_populator_messages | Total number of kakfa messages produced by the queue populator | Counter
-replication_populator_objects | Total objects queued for replication | Counter
-replication_populator_bytes | Total number of bytes queued for replication not including metadata | Counter
-replication_processor_messages | Total number of kakfa messages consumed by the queue processor | Counter
-replication_processor_objects | Number of objects replicated | Counter
-replication_processor_bytes | Number of bytes replicated not including metadata | Counter
-replication_processor_elapsed_seconds | Replication jobs elapsed time in seconds | Histogram
-replication_status_processor_objects | Number of objects updated | Counter
+replication_objects_status_changed | Number of objects updated | Counter
 
-The difference between processor objects and queued objects is the current number of waiting objects.
-The difference between processor bytes and queued bytes is the current amount of bytes waiting to replicate.
+### Labels
 
-## Labels
 | Name | Description |
 | ---- | ----------- |
-origin | What method began the replication
-raftId | Which raft logs the populator is connected to
-partition | Which Kafka partition the event comes from or is going to
-sourceLocation | Which location our data replication is coming from, part of configuration
-sourceLocationType | Type of location our replication is coming from, such as AWS or Memory
-destinationLocation | Which location our data replication is going to, part of configuration
-destinationLocationType | Type of location our replication is going to, such as AWS or Memory
-kafkaStatus | Kafka execution status
-contentLengthRange | Range of sizes of content the request falls into, such as 10MB to 30MB
-replicationStatus | Result of the replication process; success or failed
+serviceName | Name of the service where metrics are coming from, used to distinguish general metrics
+origin | What method began the action we are doing
+logName | What type of log reader we are reading from
+logId | Unique ID of the log reader such as the raft ID.
+containerName | Name of the docker container
+replicationStatus | Result of the replication process; success, retry, or failed
+
+## Global Dashboard
+
+### Metrics
+
+### Labels
