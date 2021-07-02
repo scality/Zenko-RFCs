@@ -23,9 +23,9 @@ sequenceDiagram
 | ---- | ---- | ---- |
 replication_read_offset | Current read offset of metadata journal | Gauge
 replication_log_size | Current size of metadata journal | Gauge
-replication_queued_messages | Total number of kakfa messages produced by the queue populator | Counter
 replication_queued_objects | Total objects queued for replication | Counter
 replication_queued_bytes | Total number of bytes queued for replication not including metadata | Counter
+kafka_messages_produced | Total number of kafka messages produced by the queue processor | Counter
 
 ### Labels
 
@@ -66,11 +66,12 @@ sequenceDiagram
 
 | Name | Help | Type |
 | ---- | ---- | ---- |
-replication_processed_messages | Total number of kakfa messages consumed by the queue processor | Counter
 replication_processed_objects | Number of objects replicated | Counter
 replication_processed_bytes | Number of bytes replicated not including metadata | Counter
 replication_processor_elapsed_seconds | Replication jobs elapsed time in seconds | Histogram
-replication_queued_messages | Total number of kakfa messages produced by the queue processor, for status processing | Counter
+kafka_messages_consumed | Total number of kakfa messages consumed by the queue processor | Counter
+kafka_messages_produced | Total number of kafka messages produced by the queue processor | Counter
+kafka_lag | Number of kafka objects we are behind in the queue | Gauge
 
 ### Labels
 
@@ -104,6 +105,7 @@ sequenceDiagram
 | Name | Help | Type |
 | ---- | ---- | ---- |
 replication_objects_status_changed | Number of objects updated | Counter
+kafka_lag | Number of kafka objects we are behind in the queue | Gauge
 
 ### Labels
 
