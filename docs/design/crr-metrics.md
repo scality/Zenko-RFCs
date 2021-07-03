@@ -72,6 +72,7 @@ replication_processor_elapsed_seconds | Replication jobs elapsed time in seconds
 kafka_messages_consumed | Total number of kakfa messages consumed by the queue processor | Counter
 kafka_messages_produced | Total number of kafka messages produced by the queue processor | Counter
 kafka_lag | Number of kafka objects we are behind in the queue | Gauge
+http_outgoing_bandwidth | How much outgoing HTTP bandwidth are we using | Gauge
 
 ### Labels
 
