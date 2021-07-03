@@ -24,6 +24,7 @@ nav:
     - 'Object Lock': 'design/object-lock.md'
     - 'UTAPI': 'design/utapi.md'
     - 'Ballot Launcher': 'design/ballot-launcher.md'
+    - 'CRR Metrics': 'design/crr-metrics.md'
   - Release:
     - 'General': 'release/index.md'
     - 'Disconnecting': 'release/disconnecting.md'
