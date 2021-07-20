@@ -20,7 +20,11 @@
 
 #### Actions
 
-* Create a bucket with name `encrypted-bucket`, and another one `unencrypted-bucket`
+* Create three buckets:
+  * `encrypted-nonversioned-bucket`
+  * `encrypted-versioned-bucket`
+  * `unencrypted-bucket`
+
 * With the AWS CLI:
 
   * Create a bucket encryption configuration in JSON format:
@@ -39,28 +43,31 @@
   EOF
   ```
 
-  * Apply the bucket encryption configuration to the encrypted bucket:
+  * Apply the bucket encryption configuration to the encrypted buckets:
 
   ```
   aws s3api put-bucket-encryption \
-      --bucket encrypted-bucket-1 \
+      --bucket encrypted-nonversioned-bucket \
+      --server-side-encryption-configuration file://encryption.json
+  aws s3api put-bucket-encryption \
+      --bucket encrypted-versioned-bucket \
       --server-side-encryption-configuration file://encryption.json
   ```
 
-  * Create an empty object `empty-obj` in the encrypted bucket
-  * Create a 1KB object `1kb-obj` in the encrypted bucket with random data
-  * Create a 1MB object `1mb-obj` in the encrypted bucket with random data
-  * Create a 1GB MPU object `1gb-obj` in the encrypted bucket with random data
+  * In each encrypted test bucket created above:
+    * Create an empty object `empty-obj`
+    * Create a 1KB object `1kb-obj`
+    * Create a 1MB object `1mb-obj`
+    * Create a 1GB MPU object `1gb-mpu-obj`
+
+  * In the unencrypted bucket:
+    * Create a 1KB object `1kb-encrypted-obj` and provide the
+      `--sse-customer-algorithm=AES256` option to `aws` command
+    * Create a 1GB MPU object `1gb-encrypted-mpu-obj` and provide the
+      `--sse-customer-algorithm=AES256` option to `aws` command
+
   * Do a HEAD on each object
   * Do a GET on each object
-  * Create a 1KB object `1kb-encrypted-obj` in the unencrypted bucket,
-    provide the `--sse-customer-algorithm=AES256` option to `aws`
-    command
-  * Create a 1GB MPU object `1gb-encrypted-obj` in the unencrypted
-    bucket, provide the `--sse-customer-algorithm=AES256` option to
-    `aws` command
-  * Do a HEAD on those two objects
-  * Do a GET on those two objects
 
 #### Expected Results
 
@@ -76,6 +83,223 @@
 * Cloudserver and Gemalto plugin logs show no error nor warning
 * KMS logs (in `/opt/keysecure/logs/keysecure.system.log`) show no
   error during operations
+
+## Encryption-Related IAM Authorization
+
+### An IAM user with no policy should be denied all bucket encryption
+    configuration actions
+
+#### Actions
+
+* Create an IAM user and a set of user credentials, stored as
+  `user-profile` in the CLI config
+* Create a bucket using account credentials: `test-iam-bucket`
+* Create a bucket encryption configuration in JSON format:
+
+```
+cat > encryption.json <<EOF
+{
+  "Rules": [
+    {
+      "ApplyServerSideEncryptionByDefault": {
+          "SSEAlgorithm": "AES256"
+      }
+    }
+  ]
+}
+EOF
+```
+
+* Try to apply the bucket encryption configuration to the bucket using
+  user credentials:
+
+```
+aws s3api put-bucket-encryption \
+    --profile user-profile \
+    --bucket test-iam-bucket \
+    --server-side-encryption-configuration file://encryption.json
+```
+
+* Apply the bucket encryption configuration to the bucket using
+  account credentials:
+
+```
+aws s3api put-bucket-encryption \
+    --profile account-profile \
+    --bucket test-iam-bucket \
+    --server-side-encryption-configuration file://encryption.json
+```
+
+* Try to get the bucket encryption configuration of the bucket
+  using user credentials:
+
+```
+aws s3api get-bucket-encryption \
+    --profile user-profile \
+    --bucket test-iam-bucket
+```
+
+* Try to delete the bucket encryption configuration of the bucket
+  using user credentials:
+
+```
+aws s3api delete-bucket-encryption \
+    --profile user-profile \
+    --bucket test-iam-bucket
+```
+
+#### Expected Results
+
+* Putting bucket encryption should fail with error status 403 when
+  user credentials are used
+* Getting bucket encryption should fail with error status 403 when
+  user credentials are used
+* Deleting bucket encryption should fail with error status 403 when
+  user credentials are used
+
+### IAM user policies should be honored for bucket encryption
+    configuration actions
+
+#### Actions
+
+* Create an IAM user and a set of user credentials, stored as
+  `user-profile` in the CLI config
+* Create a bucket using account credentials: `test-iam-bucket`
+* Create a bucket encryption configuration in JSON format:
+
+```
+cat > encryption.json <<EOF
+{
+  "Rules": [
+    {
+      "ApplyServerSideEncryptionByDefault": {
+          "SSEAlgorithm": "AES256"
+      }
+    }
+  ]
+}
+EOF
+```
+
+* Create an IAM policy document allowing putting (and deleting) bucket
+  encryption configurations:
+
+```
+cat > iam-policy-allow-put-encryption.json
+{
+    "Version":"2012-10-17",
+    "Statement":[
+        {
+            "Effect":"Allow",
+            "Action": "s3:PutEncryptionConfiguration",
+            "Resource":"arn:aws:s3:::test-iam-bucket"
+        }
+    ]
+}
+```
+
+* Apply the IAM user policy `iam-policy-allow-put-encryption.json` to
+  the IAM user
+* Apply the bucket encryption configuration to the bucket using
+  user credentials:
+
+```
+aws s3api put-bucket-encryption \
+    --profile user-profile \
+    --bucket test-iam-bucket \
+    --server-side-encryption-configuration file://encryption.json
+```
+
+* Try to get the bucket encryption configuration of the bucket using
+  user credentials:
+
+```
+aws s3api get-bucket-encryption \
+    --profile user-profile \
+    --bucket test-iam-bucket
+```
+
+* Delete the bucket encryption configuration of the bucket using user
+  credentials:
+
+```
+aws s3api delete-bucket-encryption \
+    --profile user-profile \
+    --bucket test-iam-bucket
+```
+
+* Create an IAM policy document allowing getting bucket encryption
+  configurations:
+
+```
+cat > iam-policy-allow-get-encryption.json
+{
+    "Version":"2012-10-17",
+    "Statement":[
+        {
+            "Effect":"Allow",
+            "Action": "s3:GetEncryptionConfiguration",
+            "Resource":"arn:aws:s3:::test-iam-bucket"
+        }
+    ]
+}
+```
+
+* Apply the IAM user policy `iam-policy-allow-get-encryption.json` to
+  the IAM user
+* Try to apply the bucket encryption configuration to the bucket using
+  user credentials:
+
+```
+aws s3api put-bucket-encryption \
+    --profile user-profile \
+    --bucket test-iam-bucket \
+    --server-side-encryption-configuration file://encryption.json
+```
+
+* Apply the bucket encryption configuration to the bucket using
+  account credentials:
+
+```
+aws s3api put-bucket-encryption \
+    --profile account-profile \
+    --bucket test-iam-bucket \
+    --server-side-encryption-configuration file://encryption.json
+```
+
+* Get the bucket encryption configuration of the bucket using user
+  credentials:
+
+```
+aws s3api get-bucket-encryption \
+    --profile user-profile \
+    --bucket test-iam-bucket
+```
+
+* Try to delete the bucket encryption configuration of the bucket
+  using user credentials:
+
+```
+aws s3api delete-bucket-encryption \
+    --profile user-profile \
+    --bucket test-iam-bucket
+```
+
+#### Expected Results
+
+* With IAM policy allowing PUT/DELETE: Putting bucket encryption
+  should succeed
+* With IAM policy allowing PUT/DELETE: Deleting bucket encryption
+  should succeed
+* With IAM policy allowing PUT/DELETE: Getting bucket encryption
+  should fail with error status 403
+* With IAM policy allowing GET: Putting bucket encryption
+  should fail with error status 403
+* With IAM policy allowing GET: Deleting bucket encryption
+  should fail with error status 403
+* With IAM policy allowing GET: Getting bucket encryption
+  should succeed
+
 
 ## Upgrade Tests
 
