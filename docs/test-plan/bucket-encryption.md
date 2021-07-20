@@ -91,6 +91,105 @@ Log_Level=HIGH
 * KMS logs (in `/opt/keysecure/logs/keysecure.system.log`) show no
   error during operations
 
+## Encryption With CRR
+
+### Backbeat CRR should support encryption on source if the source
+    bucket has a bucket encryption configuration
+
+#### Actions
+
+* Setup CRR between a source bucket `source-encrypted-bucket` and a target
+  bucket `target-bucket`
+* Create a bucket encryption configuration in JSON format:
+
+```
+cat > encryption.json <<EOF
+{
+  "Rules": [
+    {
+      "ApplyServerSideEncryptionByDefault": {
+          "SSEAlgorithm": "AES256"
+      }
+    }
+  ]
+}
+EOF
+```
+
+* Apply the bucket encryption configuration to the source bucket:
+
+```
+aws s3api put-bucket-encryption \
+    --endpoint http://source-endpoint \
+    --profile source-profile \
+    --bucket source-encrypted-bucket \
+    --server-side-encryption-configuration file://encryption.json
+```
+
+* Put a 1MB object `1mb-obj` in the source bucket
+* Put a 1GB MPU object `1gb-mpu-obj` in the source bucket
+* Wait for CRR to complete
+* do a GET on each object on the target
+* do a HEAD on each object on the source
+* check the logs on source cloudserver and backbeat
+
+#### Expected Results
+
+* the GETs should return identical contents than the source object
+* the HEADs should show COMPLETED status
+* logs should show no error or warning
+
+
+### Backbeat CRR should support encryption on target if the target
+    bucket has a bucket encryption configuration
+
+#### Actions
+
+* Setup CRR between a source bucket `source-bucket` and a target
+  bucket `target-encrypted-bucket`
+* Create a bucket encryption configuration in JSON format:
+
+```
+cat > encryption.json <<EOF
+{
+  "Rules": [
+    {
+      "ApplyServerSideEncryptionByDefault": {
+          "SSEAlgorithm": "AES256"
+      }
+    }
+  ]
+}
+EOF
+```
+
+* Apply the bucket encryption configuration to the target bucket:
+
+```
+aws s3api put-bucket-encryption \
+    --endpoint http://target-endpoint \
+    --profile target-profile \
+    --bucket target-encrypted-bucket \
+    --server-side-encryption-configuration file://encryption.json
+```
+
+* Put a 1MB object `1mb-obj` in the source bucket
+* Put a 1GB MPU object `1gb-mpu-obj` in the source bucket
+* Wait for CRR to complete
+* do a GET on each object on the target
+* do a HEAD on each object on the source
+* check the logs on source cloudserver and backbeat
+* check some sproxyd keys belonging to the objects on the target
+  (fetch object metadata first through bucketd to know the keys)
+
+#### Expected Results
+
+* the GETs should return identical contents than the source object
+* the HEADs should show COMPLETED status
+* logs should show no error or warning
+* sproxyd keys should be random-looking data meaning it is encrypted
+
+
 ## Encryption-Related IAM Authorization
 
 ### An IAM user with no policy should be denied all bucket encryption
