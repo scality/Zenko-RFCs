@@ -27,3 +27,5 @@ nav:
   - Release:
     - 'General': 'release/index.md'
     - 'Disconnecting': 'release/disconnecting.md'
+  - Test Plans:
+    - 'Bucket Encryption': 'test-plan/bucket-encryption.md'
