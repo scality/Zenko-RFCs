@@ -8,6 +8,13 @@
 
 * Deploy the KMS appliance to test in a single instance using [these instructions]
   (https://documentation.scality.com/S3C/7.9.0/installation/install_s3c/Configuring_the_S3_Cluster/additional_features/encryption+key_mgmt_configuration.html).
+* Make sure the Gemalto software logs in its own log file by adding
+  the following config lines to `ProtectAppICAPI.properties`:
+
+```
+Log_File=/logs/gemalto.log
+Log_Level=HIGH
+```
 
 #### Expected Results
 
